@@ -23,7 +23,9 @@ classdef TagCluster
         %   TagList : (cell array of baseTag or baseTag subobjects)
         %   enable_plots : (boolean) enable a few debugging plots during
         %       the constructor process
-        function self = TagCluster(TagList, enable_plots)
+        %   window : 1x2 array. The first item is the desired start time.
+        %   The second item is the desired end time. units are in seconds.
+        function self = TagCluster(TagList, enable_plots, window)
             self.Tags = TagList;
             if enable_plots
                 self.plot_accels("Orignal Acceleration");
@@ -32,13 +34,12 @@ classdef TagCluster
             % correct the tag orientations
             self = self.adjust_all();
             
-            % CHANGE THESE TO DESIRED VALUES]
             % typically the start and end of a data collection session
             % contains a bunch of random data from moving the tags around. 
             % use these indexes to chop off the beginning and end of a
             % dataset. units are in seconds.
-            start_time = 60; 
-            end_time = 100000;
+            start_time = window(1); 
+            end_time = window(2);
 
             for i = 1:length(self.Tags)
                 start_index = find_index(self.Tags{i}.time, start_time);
