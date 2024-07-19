@@ -8,6 +8,7 @@ classdef D4 < baseTag
             load(filename);
             self.accel = A.data;
             self.mag = M.data;
+            self.depth = P.data;
             self.time = time' * 60 * 60;
             self.name = name;
         end

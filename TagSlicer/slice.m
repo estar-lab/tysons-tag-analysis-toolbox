@@ -31,6 +31,10 @@ function new_tag = slice(tag,bounds,name)
         new_tag.head = new_tag.head(s:e,:);
     end
 
+    if ~isempty(new_tag.depth)
+        new_tag.depth = new_tag.depth(s:e);
+    end
+
     new_tag.name = name;
 end
 

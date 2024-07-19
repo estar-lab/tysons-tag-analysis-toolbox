@@ -13,6 +13,7 @@ classdef standardTag < baseTag
             self.mag = sliced_tag.mag;
             self.rpy = sliced_tag.rpy;
             self.head = sliced_tag.head;
+            self.depth = sliced_tag.depth;
             self.name = name;
         end
 

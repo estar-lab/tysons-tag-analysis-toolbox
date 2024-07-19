@@ -73,7 +73,7 @@ classdef baseTag
             elseif ~isempty(self.accel) & ~isempty(self.mag)
                 algo = 1;
             end
-            algo = 3;
+            algo = 1;
 
             % temporarily set all algorithms to calc_naive_rpy (Ding's
             % stuff)
@@ -117,7 +117,12 @@ classdef baseTag
             fig = figure("Name",self.name); clf(fig);
 
             % Calculate Number of Plots Based on Available Data
-            vars = [~isempty(self.accel) ~isempty(self.gyro) ~isempty(self.mag) ~isempty(self.rpy) ~isempty(self.head)];
+            vars = [~isempty(self.accel) ...
+                    ~isempty(self.gyro)  ...
+                    ~isempty(self.mag)   ...
+                    ~isempty(self.rpy)   ...
+                    ~isempty(self.head)  ...
+                    ~isempty(self.depth)];
             num_plots = sum(vars);
             current_plot = 1;
 
@@ -190,6 +195,18 @@ classdef baseTag
                 current_plot = current_plot + 1;
             else
                 fprintf("\tNo heading angle data for " + self.name + "\n");
+            end
+
+            % Depth plot
+            if ~isempty(self.depth)
+                axs(current_plot) = subplot(num_plots,1,current_plot); hold on;
+                plot(self.time, self.depth);
+                ylabel("Depth");
+                title(sprintf(self.name + " Depth"));
+                xlabel("Time (s)");
+                current_plot = current_plot + 1;
+            else
+                fprintf("\tNo depth data for " + self.name + "\n");
             end
 
             linkaxes(axs,'x')

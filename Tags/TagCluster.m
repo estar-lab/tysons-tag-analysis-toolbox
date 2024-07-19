@@ -331,6 +331,25 @@ classdef TagCluster
             linkaxes(axs,'x')
         end
 
+        % Plot depths for all tags
+        % Each tag gets its own subplot
+        function self = plot_depth(self, fig_name)
+            fig = figure("Name",fig_name); clf(fig);
+            for i = 1:length(self.Tags)
+                if isempty(self.Tags{i}.depth)
+                    fprintf("\tNo depth data for " + self.Tags{i}.name + "\n");
+                    continue;
+                end
+                axs(i) = subplot(length(self.Tags),1,i); hold on;
+                plot(self.Tags{i}.time, self.Tags{i}.depth);
+                xlabel("Time (seconds)");
+                title(self.Tags{i}.name);
+                ylabel("Depth");
+                grid on;
+            end
+            linkaxes(axs,'x');
+        end
+
         % plot the magnetometer balls for each tag, each in its seperate
         % axis.
         % INPUTS:
