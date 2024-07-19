@@ -11,8 +11,8 @@ classdef standardTag < baseTag
             self.gyro = sliced_tag.gyro;
             self.temp = sliced_tag.temp;
             self.mag = sliced_tag.mag;
-            self.rpy = sliced_tag.rpy;
-            self.head = sliced_tag.head;
+            self.rpy_tag = sliced_tag.rpy_tag;
+            self.rpy_whale = sliced_tag.rpy_whale;
             self.depth = sliced_tag.depth;
             self.name = name;
         end

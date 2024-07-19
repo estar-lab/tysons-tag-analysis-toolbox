@@ -47,6 +47,10 @@ classdef TagCluster
                 self.Tags{i}.time = self.Tags{i}.time(start_index:end_index);
                 self.Tags{i}.accel = self.Tags{i}.accel(start_index:end_index,:);
                 self.Tags{i}.mag = self.Tags{i}.mag(start_index:end_index,:);
+                
+                if ~isempty(self.Tags{i}.depth)
+                    self.Tags{i}.depth = self.Tags{i}.depth(start_index:end_index,:);
+                end
 
                 if ~isempty(self.Tags{i}.gyro)
                     self.Tags{i}.gyro = self.Tags{i}.gyro(start_index:end_index,:);
@@ -288,44 +292,44 @@ classdef TagCluster
             linkaxes(axs,'x');
         end
 
-        % Plot euler angles for all tags
+        % Plot tag euler angles for all tags
         % Each tag gets its own subplot
-        function self = plot_eulers(self,fig_name)
+        function self = plot_tag_eulers(self,fig_name)
             fig = figure("Name",fig_name); clf(fig);
             for i = 1:length(self.Tags)
-                if isempty(self.Tags{i}.rpy)
-                    fprintf("\tNo euler angles for " + self.Tags{i}.name + "\n");
+                if isempty(self.Tags{i}.rpy_tag)
+                    fprintf("\tNo tag euler angles for " + self.Tags{i}.name + "\n");
                     continue;
                 end
                 axs(i) = subplot(length(self.Tags),1,i); hold on;
-                plot(self.Tags{i}.time,self.Tags{i}.rpy(:,1), 'b');
-                plot(self.Tags{i}.time,self.Tags{i}.rpy(:,2), 'r');
-                plot(self.Tags{i}.time,self.Tags{i}.rpy(:,3), 'g');
+                for j = 1:3
+                    plot(self.Tags{i}.time,self.Tags{i}.rpy_tag(:,j));
+                end
                 legend("Roll", "Pitch", "Yaw");
                 xlabel("Time (seconds)")
-                ylabel("Euler Angles")
+                ylabel("Tag Euler Angles")
                 title(self.Tags{i}.name);
                 grid on;
             end
             linkaxes(axs,'x');
         end
         
-        % Plot headings for all tags
+        % Plot whale euler angles for all tags
         % Each tag gets its own subplot
-        function self = plot_headings(self, fig_name)
+        function self = plot_whale_eulers(self, fig_name)
             fig = figure("Name",fig_name); clf(fig);
             for i = 1:length(self.Tags)
-                if isempty(self.Tags{i}.head)
-                    fprintf("\tNo headings for " + self.Tags{i}.name + "\n");
+                if isempty(self.Tags{i}.rpy_whale)
+                    fprintf("\tNo whale euler angles for " + self.Tags{i}.name + "\n");
                     continue;
                 end
                 axs(i) = subplot(length(self.Tags),1,i); hold on;
                 for j = 1:3
-                    plot(self.Tags{i}.time,self.Tags{i}.head(:,j))
+                    plot(self.Tags{i}.time,self.Tags{i}.rpy_whale(:,j))
                 end
                 xlabel("Time (seconds)")
                 title(self.Tags{i}.name);
-                legend("North", "West", "Sky")
+                legend("Roll", "Pitch", "Yaw");
                 grid on;
             end
             linkaxes(axs,'x')
@@ -526,7 +530,7 @@ classdef TagCluster
 
             axs(1) = subplot(3,1,1); hold on;
             for j = 1:length(self.Tags)
-                plot(self.Tags{j}.time, self.Tags{j}.rpy(:,1));
+                plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,1));
             end
             legend(names)
             xlabel("Time (seconds)")
@@ -536,7 +540,7 @@ classdef TagCluster
 
             axs(2) = subplot(3,1,2); hold on;
             for j = 1:length(self.Tags)
-                plot(self.Tags{j}.time, self.Tags{j}.rpy(:,2));
+                plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,2));
             end
             legend(names)
             xlabel("Time (seconds)")
@@ -546,7 +550,7 @@ classdef TagCluster
 
             axs(3) = subplot(3,1,3); hold on;
             for j = 1:length(self.Tags)
-                plot(self.Tags{j}.time, self.Tags{j}.rpy(:,3));
+                plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,3));
             end
             legend(names)
             xlabel("Time (seconds)")
