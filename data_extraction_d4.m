@@ -1,8 +1,8 @@
 clear; close all;
 
 lib = "DTAG4_Analysis\";
-fullpath = genpath(lib);
-addpath(fullpath);
+fullpath_lib = genpath(lib);
+addpath(fullpath_lib);
 
 % Pick an appropriate deployment id. Usually you would follow the standard
 % DTAG protocol of: 2-letter Latin species initials, 2-digit year, underscore,
@@ -161,3 +161,5 @@ ylabel('Mag []')
 filename = depid + ".mat";
 fullpath = recdir + "\" + filename;
 save(fullpath, 'A', 'M','P','time');
+
+rmpath(fullpath_lib);
