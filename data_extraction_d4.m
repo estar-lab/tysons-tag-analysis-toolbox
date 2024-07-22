@@ -1,6 +1,8 @@
 clear; close all;
 
-addpath("DTAG4_Analysis\");
+lib = "DTAG4_Analysis\";
+fullpath = genpath(lib);
+addpath(fullpath);
 
 % Pick an appropriate deployment id. Usually you would follow the standard
 % DTAG protocol of: 2-letter Latin species initials, 2-digit year, underscore,
