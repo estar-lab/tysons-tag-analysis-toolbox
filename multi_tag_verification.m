@@ -66,13 +66,20 @@ tags = tags.adjust_balls();
 % Generate eulers 
 tags = tags.eulers();
 
+
 %% Make Plots
 for i = 1:length(tags.Tags)
-    tags.Tags{i}.plot_core();
+    tags.Tags{i}.plot_core("Raw Euler Angles");
+end
+
+tags = tags.correct_eulers();
+
+for i = 1:length(tags.Tags)
+    tags.Tags{i}.plot_core("sin(Euler Angles)");
 end
 
 %tags.plot_magnetometer_balls();
-tags.plot_accels("Acceleration All Tags");
-tags.plot_mags("Magnetometer All Tags");
-tags.plot_headings("Headings");
-tags.plot_eulers("Eulers");
+% tags.plot_accels("Acceleration All Tags");
+% tags.plot_mags("Magnetometer All Tags");
+% tags.plot_headings("Headings");
+% tags.plot_eulers("Eulers");

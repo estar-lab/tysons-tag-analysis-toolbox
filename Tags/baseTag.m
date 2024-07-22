@@ -23,15 +23,9 @@ classdef baseTag
 
         % degrees
         % [roll pitch yaw]
-        rpy 
+        rpy_tag
 
-        % n-by-3 3d heading of the animal, each roll combines the
-        % pitch and yaw estimates and gives a 3d vector heading of
-        % the animal. E.g. [1, 0, 0] means the animal is facing
-        % magnetic north with 0 pitch. [0, 1, 0] means the animal is
-        % facing west with 0 pitch. [0, 0, 1] means the animal is
-        % having a 90 deg pitch looking at the sky.
-        head
+        rpy_whale
 
         % depth (meters)
         depth
@@ -56,6 +50,7 @@ classdef baseTag
         function self = clearnan(self)
             self.accel(isnan(self.accel)) = 0;
             self.mag(isnan(self.mag)) = 0;
+            self.depth(isnan(self.depth)) = 0;
         end
         
         % generate euler angles from available tag data
@@ -67,17 +62,18 @@ classdef baseTag
             %       acceleration and magnetometer
             %   2 : madgwick algorithm. requires acceleration, gyroscope,
             %       and magnetometer
+            % algo = 1;
+            % if ~isempty(self.accel) & ~isempty(self.gyro) & ~isempty(self.mag)
+            %     algo = 2;
+            % elseif ~isempty(self.accel) & ~isempty(self.mag)
+            %     algo = 1;
+            % end
+            % MADGWICK ALGORITHM IS CURRENTLY NOT SUPPORTED
             algo = 1;
-            if ~isempty(self.accel) & ~isempty(self.gyro) & ~isempty(self.mag)
-                algo = 2;
-            elseif ~isempty(self.accel) & ~isempty(self.mag)
-                algo = 1;
-            end
-            algo = 3;
 
             % temporarily set all algorithms to calc_naive_rpy (Ding's
             % stuff)
-
+            
             if algo == 2
                 AHRS = MadgwickAHRS('SamplePeriod', 1/50, 'Beta', 0.4);
                 quaternion = zeros(length(self.time), 4);
@@ -91,33 +87,52 @@ classdef baseTag
             end
 
             if algo == 1
+                % Generate tag frame eulers
                 [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
-                [pitch_dp_nv, yaw_dp_nv, vector_dp_nv, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
+                [pitch_dp_nv, yaw_dp_nv, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
                     calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
 
-                self.rpy(:,1) = roll_filt_nv;
-                self.rpy(:,2) = pitch_filt_nv;
-                self.rpy(:,3) = yaw_filt_nv;
+                self.rpy_tag(:,1) = roll_filt_nv;
+                self.rpy_tag(:,2) = pitch_filt_nv;
+                self.rpy_tag(:,3) = yaw_filt_nv;
                 
-                self.head = vector_dp_nv;
-            end
+                % Generate whale frame eulers
+                if ~isempty(self.depth)
+                    self = self.orient_into_whale_frame();
+    
+                    [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
+                    [pitch_dp_nv, yaw_dp_nv, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
+                        calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
+    
+                    self.rpy_whale(:,1) = roll_filt_nv;
+                    self.rpy_whale(:,2) = pitch_filt_nv;
+                    self.rpy_whale(:,3) = yaw_filt_nv;
+                else
+                    fprintf("No depth data for " + self.name + ", cannot correct orientation.");
+                end
 
-            if algo == 3
-                [roll,pitch,yaw,heading] = calc_naive_rpy(self.accel,self.mag,50);
-                self.rpy(:,1) = roll;
-                self.rpy(:,2) = pitch;
-                self.rpy(:,3) = yaw;
-                self.head = heading;
+                
             end
         end
+
         
+
         % Accel, gyro, and mag plot
-        function self = plot_core(self)
+        function self = plot_core(self, fig_name)
+            if ~exist('fig_name','var')
+                fig_name = self.name;
+            end
+
             fprintf("Plotting core data for " + self.name + "\n");
-            fig = figure("Name",self.name); clf(fig);
+            fig = figure("Name",fig_name); clf(fig);
 
             % Calculate Number of Plots Based on Available Data
-            vars = [~isempty(self.accel) ~isempty(self.gyro) ~isempty(self.mag) ~isempty(self.rpy) ~isempty(self.head)];
+            vars = [~isempty(self.accel) ...
+                    ~isempty(self.gyro)  ...
+                    ~isempty(self.mag)   ...
+                    ~isempty(self.rpy_tag)   ...
+                    ~isempty(self.rpy_whale) ...
+                    ~isempty(self.depth)];
             num_plots = sum(vars);
             current_plot = 1;
 
@@ -162,34 +177,46 @@ classdef baseTag
                 fprintf("\tNo magnetometer data for " + self.name + "\n");
             end
 
-            % Euler angle plot
-            if ~isempty(self.rpy)
+            % Tag euler angle plot
+            if ~isempty(self.rpy_tag)
                 axs(current_plot) = subplot(num_plots,1,current_plot); hold on;
-                for i = 1:width(self.rpy)
-                    plot(self.time,self.rpy(:,i))
+                for i = 1:width(self.rpy_tag)
+                    plot(self.time,self.rpy_tag(:,i))
                 end
                 legend("Roll","Pitch","Yaw")
                 ylabel("Euler Angles)")
-                title(sprintf(self.name + " Euler Angles)"))
+                title(sprintf(self.name + " Tag Euler Angles"))
                 xlabel("Time (s)")
                 current_plot = current_plot + 1;
             else
-                fprintf("\tNo euler angle data for " + self.name + "\n");
+                fprintf("\tNo tag euler angle data for " + self.name + "\n");
             end
 
             % Heading plot
-            if ~isempty(self.rpy)
+            if ~isempty(self.rpy_whale)
                 axs(current_plot) = subplot(num_plots,1,current_plot); hold on;
-                for i = 1:width(self.head)
-                    plot(self.time,self.head(:,i));
+                for i = 1:width(self.rpy_whale)
+                    plot(self.time,self.rpy_whale(:,i));
                 end
-                legend("North","West","Sky");
+                legend("Roll","Pitch","Yaw");
                 ylabel("Heading");
-                title(sprintf(self.name + " Heading"));
+                title(sprintf(self.name + " Whale Euler Angles"));
                 xlabel("Time (s)");
                 current_plot = current_plot + 1;
             else
-                fprintf("\tNo heading angle data for " + self.name + "\n");
+                fprintf("\tNo whale euler angle data for " + self.name + "\n");
+            end
+
+            % Depth plot
+            if ~isempty(self.depth)
+                axs(current_plot) = subplot(num_plots,1,current_plot); hold on;
+                plot(self.time, self.depth);
+                ylabel("Depth");
+                title(sprintf(self.name + " Depth"));
+                xlabel("Time (s)");
+                current_plot = current_plot + 1;
+            else
+                fprintf("\tNo depth data for " + self.name + "\n");
             end
 
             linkaxes(axs,'x')
@@ -200,7 +227,7 @@ classdef baseTag
             fig = figure; clf(fig);
             hold on;
             for i = 1:3
-                plot(self.time,self.rpy(:,i));
+                plot(self.time,self.rpy_tag(:,i));
             end
             legend("Roll","Pitch","Yaw")
             ylabel("Degrees")
@@ -223,14 +250,16 @@ classdef baseTag
         % Take the sin() of all the euler angles to fix jumping betwen -180
         % and 180 degrees
         function self = correct_euler(self)
-            self.rpy = sin(toRadians('degrees',self.rpy));
+            self.rpy_tag = sin(toRadians('degrees',self.rpy_tag));
+            self.rpy_whale = sin(toRadians('degrees',self.rpy_whale));
         end
         
         % Unroll the euler angles. Alternate method to sin(). Recommended
         % to use correct_euler()
         function self = unwrap_euler(self)
             for i = 1:3
-                self.rpy(:,i) = unwrap(self.rpy(:,i));
+                self.rpy_tag(:,i) = unwrap(self.rpy_tag(:,i));
+                self.rpy_whale(:,i) = unwrap(self.rpy_whale(:,i));
             end
         end
         
@@ -245,6 +274,7 @@ classdef baseTag
     methods (Access=protected)
 
         % Roll, pitch, yaw, should be in degrees
+        % NOT SUPPORTED, PART OF MADGWICK ALGORITHM
         function self = euler_to_heading(self)
             self.head = zeros(size(self.rpy));
             for i = 1:length(self.rpy)
@@ -264,6 +294,13 @@ classdef baseTag
                direction_vector = R(:,1);
                self.head(i,:) = direction_vector';
             end
+        end
+        
+        % Change tag frame into whale frame
+        function self = orient_into_whale_frame(self)
+            [rot,~] = find_tag_orientation_func(self.accel, self.depth,50);
+            self.accel = self.accel * rot;
+            self.mag = self.mag * rot;
         end
     end
 end

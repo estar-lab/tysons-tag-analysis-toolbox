@@ -8,6 +8,11 @@ classdef D4 < baseTag
             load(filename);
             self.accel = A.data;
             self.mag = M.data;
+            if exist("P","var") == 1
+                self.depth = P.data * -1;
+                % floor depth to 0
+                self.depth = self.depth - max(self.depth);
+            end
             self.time = time' * 60 * 60;
             self.name = name;
         end

@@ -9,6 +9,7 @@ classdef D3 < baseTag
             old_time = TagData.timeSec;
             old_mag = TagData.magTag;
             old_accel = TagData.accelTag * 10;
+            old_depth = TagData.depth;
 
             Fs = 50;
             new_time = old_time(1):(1/Fs):old_time(end);
@@ -18,8 +19,14 @@ classdef D3 < baseTag
             self.mag = interp1(old_time, old_mag, new_time);
             self.time = new_time;
 
+            self.depth = interp1(old_time, old_depth, new_time);
+
             self.name = name;
         end
+        
+        function self = adjust(self)
+        end
+
     end
 end
 

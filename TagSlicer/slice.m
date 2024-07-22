@@ -23,12 +23,16 @@ function new_tag = slice(tag,bounds,name)
         new_tag.mag = new_tag.mag(s:e,:);
     end
 
-    if ~isempty(new_tag.rpy)
-        new_tag.rpy = new_tag.mag(s:e,:);
+    if ~isempty(new_tag.rpy_tag)
+        new_tag.rpy_tag = new_tag.rpy_tag(s:e,:);
     end
 
-    if ~isempty(new_tag.head)
-        new_tag.head = new_tag.head(s:e,:);
+    if ~isempty(new_tag.rpy_whale)
+        new_tag.rpy_whale = new_tag.rpy_whale(s:e,:);
+    end
+
+    if ~isempty(new_tag.depth)
+        new_tag.depth = new_tag.depth(s:e);
     end
 
     new_tag.name = name;

@@ -30,7 +30,7 @@ addpath(fullpath_lib);
 % 'filepath' would be the path into the folder that contains the folder mn24_010a\. For me that happens to be
 % "C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\"
 
-depid = 'mn24_010a';
+depid = 'mn22_201a';
 
 % Give the directory where the raw data is.
 filepath = 'C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\';
@@ -47,7 +47,7 @@ recdir = [filepath, depid];
 % X = d3readswv(recdir,depid,5) ;		% decimates each channel by a factor of 5
 % If you need to find out what the original sampling rates are of the different sensors, use:
 % X = d3readswv(recdir,depid,'info')
-X = d3readswv_commonfs(recdir,depid,50);
+X = d3readswv_commonfs(recdir,depid,25);
 
 %% Generate sensor structures for each of the data types.
 % Note that the sensor channels may change if your tag was recording a different
