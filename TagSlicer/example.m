@@ -1,6 +1,6 @@
 close all; clear;
 
-addpath("TagSlicer\");
+addpath(genpath("TagSlicer\"));
 
 %% CHANGE THIS STUFF
 
@@ -47,3 +47,6 @@ tag = D4(strcat(filepath,depid,"\",filename),"tag");
 tag = tag.adjust();
 
 tag_slicer(strcat(filepath,depid),tag,partition_names);
+
+%% Clean up libaries
+rmpath(genpath("TagSlicer\"));

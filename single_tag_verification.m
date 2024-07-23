@@ -60,3 +60,10 @@ end
 % tags.plot_mags("Magnetometer All Tags");
 % tags.plot_headings("Headings");
 % tags.plot_eulers("Eulers");
+
+%% Clean up libaries
+
+rmpath(genpath("Tags\"));
+rmpath(genpath("Lags\"));
+rmpath(genpath("HelperFuncs\"));
+rmpath(genpath("MTAG_Lib_Ding\"));

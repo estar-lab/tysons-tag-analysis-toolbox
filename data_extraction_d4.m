@@ -162,4 +162,5 @@ filename = depid + ".mat";
 fullpath = recdir + "\" + filename;
 save(fullpath, 'A', 'M','P','time');
 
+%% Clean up libaries
 rmpath(fullpath_lib);

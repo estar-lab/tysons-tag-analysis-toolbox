@@ -177,4 +177,5 @@ fullpath = filepath + "\" + filename;
 
 save(fullpath, 'TagData');
 
+%% Clean up libraries
 rmpath(fullpath_lib);
