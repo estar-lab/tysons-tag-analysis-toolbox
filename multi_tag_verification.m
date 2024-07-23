@@ -13,10 +13,10 @@
 
 close all; clear; 
 
-addpath("Tags\");
-addpath("Lags\");
-addpath("HelperFuncs\");
-addpath("MTAG_Lib_Ding\");
+addpath(genpath("Tags\"));
+addpath(genpath("Lags\"));
+addpath(genpath("HelperFuncs\"));
+addpath(genpath("MTAG_Lib_Ding\"));
 
 %% CHANGE THIS STUFF
 
