@@ -1,6 +1,8 @@
 close all; clear;
 
-addpath("DTAG3_Analysis\");
+lib = "DTAG3_Analysis\";
+fullpath_lib = genpath(lib);
+addpath(fullpath_lib);
 
 %% FIRST-TIME SETUP: Run this section to select main tag data directory
 
@@ -174,3 +176,5 @@ filename = depid + ".mat";
 fullpath = filepath + "\" + filename;
 
 save(fullpath, 'TagData');
+
+rmpath(fullpath_lib);

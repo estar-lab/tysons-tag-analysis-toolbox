@@ -33,13 +33,13 @@ end
 ufname = sprintf('%s/%scal.xml',getfield(TAG_PATHS,'CAL'),uname) ;
 
 % check if a deployment file already exists - if so, check if overwriting is ok
-if exist(ufname,'file'),
-   ss = sprintf(' A deployment with the same name already exists.\n Do you want to overwrite it? y/n... ') ;
-   s = input(ss,'s') ;
-   if lower(s(1))=='n',
-      return
-   end
-end
+% if exist(ufname,'file'),
+%    ss = sprintf(' A deployment with the same name already exists.\n Do you want to overwrite it? y/n... ') ;
+%    s = input(ss,'s') ;
+%    if lower(s(1))=='n',
+%       return
+%    end
+% end
 
 senssuffix = 'swv' ;
 fprintf(' Looking for recordings...\n') ;
