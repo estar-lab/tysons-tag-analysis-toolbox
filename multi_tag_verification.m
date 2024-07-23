@@ -33,19 +33,23 @@ tag_name = "D409";
 
 fullpath = filepath + "\" + filename;
 
-% The constructor you must use here changes
-% D4 : D4()
-% D3 : D3()
-% MTAG: mTag();
-% any tag that has been sliced : standardTag();
-tag1 = D4(fullpath, tag_name);
+% Must specify a tag type
+% Options: 
+%   "D3"
+%   "D4"
+%   "uTag"
+%   "dataLogger"
+%   "sliced_tag" (this is to be used if you ran the tag through a the
+%   TagSlicer first)
+% MTAGs are currently not supported
+tag1 = tag_importer(fullpath, 'D4', tag_name);
 
 %% Repeat for next tag (you can import as many tags as you want
 filepath = "C:\Users\tyson\Documents\ESTAR\Data\verification1\";
 filename = "d410_test1.mat";
 tag_name = "D410";
 fullpath = filepath + "\" + filename;
-tag2 = D4(fullpath, tag_name);
+tag2 = tag_importer(fullpath, 'D4', tag_name);
 
 %% Construct the tag cluster
 
@@ -83,3 +87,10 @@ end
 % tags.plot_mags("Magnetometer All Tags");
 % tags.plot_headings("Headings");
 % tags.plot_eulers("Eulers");
+
+%% Clean up libaries
+
+rmpath(genpath("Tags\"));
+rmpath(genpath("Lags\"));
+rmpath(genpath("HelperFuncs\"));
+rmpath(genpath("MTAG_Lib_Ding\"));

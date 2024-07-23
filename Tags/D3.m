@@ -1,4 +1,4 @@
-classdef D3 < baseTag
+classdef D3 < Tag
     %TAG Summary of this class goes here
     %   Detailed explanation goes here
     

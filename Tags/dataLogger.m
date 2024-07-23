@@ -1,4 +1,4 @@
-classdef dataLogger < baseTag
+classdef dataLogger < Tag
     %TAG Summary of this class goes here
     %   Detailed explanation goes here
     

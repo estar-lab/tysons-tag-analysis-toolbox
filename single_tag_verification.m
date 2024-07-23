@@ -20,12 +20,17 @@ tag_name = "D320";
 
 fullpath = filepath + "\" + filename;
 
-% The constructor you must use here changes
-% D4 : D4()
-% D3 : D3()
-% MTAG: mTag();
-% any tag that has been sliced : standardTag();
-tag1 = D3(fullpath, tag_name);
+% Must specify a tag type
+% Options: 
+%   "D3"
+%   "D4"
+%   "uTag"
+%   "dataLogger"
+%   "sliced_tag" (this is to be used if you ran the tag through a the
+%   TagSlicer first)
+% MTAGs are currently not supported
+tag_type = "D3";
+tag1 = tag_importer(fullpath, tag_type, tag_name);
 
 % I only care about data between 0 - 200000 seconds
 % Change this range

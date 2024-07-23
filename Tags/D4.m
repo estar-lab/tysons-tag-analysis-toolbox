@@ -1,10 +1,10 @@
-classdef D4 < baseTag
+classdef D4 < Tag
     %TAG Summary of this class goes here
     %   Detailed explanation goes here
     
     methods
         function self = D4(filename,name)
-            fprintf("Importing " + name + "\n");
+            fprintf("Importing " + name + " as a D4\n");
             load(filename);
             self.accel = A.data;
             self.mag = M.data;

@@ -1,4 +1,4 @@
-classdef uTag < baseTag
+classdef uTag < Tag
     %TAG Summary of this class goes here
     %   Detailed explanation goes here
     
