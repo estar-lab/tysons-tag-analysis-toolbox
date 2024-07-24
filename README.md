@@ -20,5 +20,3 @@ Not necessary to use.
 If you are doing a tag verification test, run one of the tag_verification scripts
 single_tag_verification.m is an example that uses one tag
 multi_tag_verification.m does the same thing but for multiple tags at the same time
-
-

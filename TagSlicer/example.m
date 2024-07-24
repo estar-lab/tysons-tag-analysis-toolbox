@@ -24,10 +24,10 @@ addpath(genpath("TagSlicer\"));
 % "C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\"
 
 %depid = 'mn24_010a';
-depid = 'mn24_010a';
+depid = '220528T121826';
 
 % Give the directory where the raw data is.
-filepath = 'C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\';
+filepath = 'E:\Data\slide_test';
 
 % How many partitions do you want, and what are their names?
 % The number of names in this array is the number of partitions
@@ -38,7 +38,7 @@ filepath = 'C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\';
 % Examples:
 %   partition_names = {"mn24_010a_sliced"};
 %   partition_names = {"mn24_010a_part1", "mn24_010a_part2"};
-partition_names = {"mn24_010a_sliced"};
+partition_names = {"220528T121826_sliced"};
 
 %% Do the slicing
 filename = strcat(depid,".mat");

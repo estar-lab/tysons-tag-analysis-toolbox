@@ -72,7 +72,14 @@ classdef TagCluster
 % so for the first one, calibrate_magnetometers() maps to
 % calibrate_magnetometer() for every tag object
         
-        % See Tag->trial_extraction
+        % See Tag->slide_time()
+        function self = slide_times(self)
+            for i = 1:length(self.Tags)
+                self.Tags{i} = self.Tags{i}.slide_time();
+            end
+        end
+
+        % See Tag->trial_extraction()
         function self = trial_extractions(self)
             for i = 1:length(self.Tags)
                 self.Tags{i} = self.Tags{i}.trial_extraction();

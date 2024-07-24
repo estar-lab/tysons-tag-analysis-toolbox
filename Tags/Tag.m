@@ -33,6 +33,7 @@ classdef Tag
         name
 
         ball
+        slides
     end
 
     methods (Abstract)
@@ -97,15 +98,33 @@ classdef Tag
                 
                 % Generate whale frame eulers
                 if ~isempty(self.depth)
-                    self = self.orient_into_whale_frame();
+                    if ~isempty(self.slides)
+                        for i = 1:length(self.slides)-1
+                            s = self.slides(i);
+                            e = self.slides(i+1);
+                            self = self.orient_into_whale_frame(s,e);
+                        end
     
-                    [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
-                    [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
-                        calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
+                        [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
+                        [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
+                            calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
+        
+                        self.rpy_whale(:,1) = roll_filt_nv;
+                        self.rpy_whale(:,2) = pitch_filt_nv;
+                        self.rpy_whale(:,3) = yaw_filt_nv;
+                    else
+                        s = 1;
+                        e = length(self.time);
+                        self = self.orient_into_whale_frame(s,e);
     
-                    self.rpy_whale(:,1) = roll_filt_nv;
-                    self.rpy_whale(:,2) = pitch_filt_nv;
-                    self.rpy_whale(:,3) = yaw_filt_nv;
+                        [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
+                        [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
+                            calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
+        
+                        self.rpy_whale(:,1) = roll_filt_nv;
+                        self.rpy_whale(:,2) = pitch_filt_nv;
+                        self.rpy_whale(:,3) = yaw_filt_nv;
+                    end
                 else
                     fprintf("No depth data for " + self.name + ", cannot correct orientation.");
                 end
@@ -167,7 +186,47 @@ classdef Tag
             end
         end
         
+        % Find slide times
+        function self = slide_time(self)
+            [section_idx_list, ~, ~] = ...
+                find_tag_slide_times_func(self.accel, self.depth, 50, 10, 0.5);
+            self.slides = section_idx_list;
+        end
 
+        % Rotate part of the dataset
+        % Start_time and end_time are in seconds
+        function self = apply_rotation(self, start_time, end_time)
+            % Define the angles in degrees
+            yaw_deg = 40;
+            roll_deg = 40;
+            
+            % Convert angles to radians
+            yaw_rad = deg2rad(yaw_deg);
+            roll_rad = deg2rad(roll_deg);
+
+            % Rotation matrix for yaw (rotation around z-axis)
+            R_z = [cos(yaw_rad), -sin(yaw_rad), 0;
+                   sin(yaw_rad),  cos(yaw_rad), 0;
+                   0,            0,            1];
+            
+            % Rotation matrix for roll (rotation around x-axis)
+            R_x = [1, 0,            0; 
+                   0, cos(roll_rad), -sin(roll_rad);
+                   0, sin(roll_rad),  cos(roll_rad)];
+
+            % Combined rotation matrix (yaw followed by roll)
+            R = R_z * R_x;
+
+            s = find_index(self.time, start_time);
+            e = find_index(self.time, end_time);
+
+            self.accel(s:e,:) = self.accel(s:e,:) * R;
+            self.mag(s:e,:) = self.mag(s:e,:) * R;
+            if ~isempty(self.gyro)
+                self.gyro(s:e,:) = self.gyro(s:e,:) * R;
+            end
+        end
+                    
         % Accel, gyro, and mag plot
         function self = plot_core(self, fig_name)
             if ~exist('fig_name','var')
@@ -348,10 +407,11 @@ classdef Tag
         end
         
         % Change tag frame into whale frame
-        function self = orient_into_whale_frame(self)
-            [rot,~] = find_tag_orientation_func(self.accel, self.depth,50);
-            self.accel = self.accel * rot;
-            self.mag = self.mag * rot;
+        % s and e are the start and end indexes of the window
+        function self = orient_into_whale_frame(self, s, e)
+            [rot,~] = find_tag_orientation_func(self.accel(s:e,:), self.depth(s:e,:),50);
+            self.accel(s:e,:) = self.accel(s:e,:) * rot;
+            self.mag(s:e,:) = self.mag(s:e,:) * rot;
         end
     end
 end

@@ -8,13 +8,13 @@ addpath(genpath("MTAG_Lib_Ding\"));
 %% CHANGE THIS STUFF
 
 % Same depid and filepath from data_extraction.m
-filepath = "E:\Data\slide_test";
+filepath = "C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\mn22_201a";
 
 % The filename of the data that you want to import
-filename = "220528T121826.csv";
+filename = "mn22_201a.mat";
 
 % tag_name is used to label plots, so you know which tag is which
-tag_name = "MTAG";
+tag_name = "D4";
 
 %% Import Tags (MORE STUFF TO CHANGE)
 
@@ -29,7 +29,7 @@ fullpath = filepath + "\" + filename;
 %   "sliced_tag" (this is to be used if you ran the tag through a the
 %   TagSlicer first)
 % MTAGs are currently not supported
-tag_type = "mTag";
+tag_type = "D4";
 tag1 = tag_importer(fullpath, tag_type, tag_name);
 
 % I only care about data between 0 - 200000 seconds
@@ -48,18 +48,16 @@ tags = tags.adjust_balls();
 % Extract trial portion
 tags = tags.trial_extractions();
 
+% Generate a synthetic "slide"
+%tags.Tags{1} = tags.Tags{1}.apply_rotation(1000,3000);
+tags = tags.slide_times();
+
 % Generate eulers 
 tags = tags.eulers();
 
 %% Make Plots
 for i = 1:length(tags.Tags)
-    tags.Tags{i}.plot_core("Raw Euler Angles");
-end
-
-tags = tags.correct_eulers();
-
-for i = 1:length(tags.Tags)
-    tags.Tags{i}.plot_core("sin(Euler Angles)");
+    tags.Tags{i}.plot_core("Euler Angles");
 end
 
 % tags.plot_magnetometer_balls();
