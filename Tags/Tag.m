@@ -199,11 +199,11 @@ classdef Tag
                 end
                 legend("Roll","Pitch","Yaw");
                 ylabel("Heading");
-                title(sprintf(self.name + " Whale Euler Angles"));
+                title(sprintf(self.name + " Animal Euler Angles"));
                 xlabel("Time (s)");
                 current_plot = current_plot + 1;
             else
-                fprintf("\tNo whale euler angle data for " + self.name + "\n");
+                fprintf("\tNo animal euler angle data for " + self.name + "\n");
             end
 
             % Depth plot

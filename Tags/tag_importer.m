@@ -17,9 +17,12 @@ function tag = tag_importer(filename,tag_type,tag_name)
         case 'sliced_tag'
             tag = standardTag(filename,tag_name);
             return;
+        case 'mTag'
+            tag = mTag(filename,tag_name);
+            return;
         otherwise
             fprintf(tag_type + " is not a valid tag type\n");
-            quit
+            return;
     end
 end
 

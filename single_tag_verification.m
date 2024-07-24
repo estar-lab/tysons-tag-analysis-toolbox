@@ -8,13 +8,13 @@ addpath(genpath("MTAG_Lib_Ding\"));
 %% CHANGE THIS STUFF
 
 % Same depid and filepath from data_extraction.m
-filepath = "C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\DTAG320H_test7\";
+filepath = "E:\Data\slide_test";
 
 % The filename of the data that you want to import
-filename = "DTAG320H_test7.mat";
+filename = "220528T121826.csv";
 
 % tag_name is used to label plots, so you know which tag is which
-tag_name = "D320";
+tag_name = "MTAG";
 
 %% Import Tags (MORE STUFF TO CHANGE)
 
@@ -29,7 +29,7 @@ fullpath = filepath + "\" + filename;
 %   "sliced_tag" (this is to be used if you ran the tag through a the
 %   TagSlicer first)
 % MTAGs are currently not supported
-tag_type = "D3";
+tag_type = "mTag";
 tag1 = tag_importer(fullpath, tag_type, tag_name);
 
 % I only care about data between 0 - 200000 seconds
