@@ -70,6 +70,8 @@ tags = tags.adjust_balls();
 % Generate eulers 
 tags = tags.eulers();
 
+tags = tags.trial_extractions();
+
 
 %% Make Plots
 for i = 1:length(tags.Tags)

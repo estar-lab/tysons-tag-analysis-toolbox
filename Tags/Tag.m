@@ -31,8 +31,8 @@ classdef Tag
         depth
         
         name
+
         ball
-        mag_A
     end
 
     methods (Abstract)
@@ -88,7 +88,7 @@ classdef Tag
             if algo == 1
                 % Generate tag frame eulers
                 [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
-                [pitch_dp_nv, yaw_dp_nv, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
+                [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
                     calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
 
                 self.rpy_tag(:,1) = roll_filt_nv;
@@ -100,7 +100,7 @@ classdef Tag
                     self = self.orient_into_whale_frame();
     
                     [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
-                    [pitch_dp_nv, yaw_dp_nv, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
+                    [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
                         calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
     
                     self.rpy_whale(:,1) = roll_filt_nv;
@@ -113,7 +113,59 @@ classdef Tag
                 
             end
         end
+        
+        % Extract the portion of the dataset where the tag is on the
+        % animal
+        function self = trial_extraction(self)
+            % Make the plot
+            fig = figure; clf(fig); hold on;
+            ax = gca;
+            for i = 1:3
+                plot(self.time,self.accel(:,i));
+            end
+            xlabel("Time (seconds)")
+            ylabel("Gyroscope Data")
+            title("Draw a rectangle around the portion of the data where the tag is on the animal");
+            
+            % Get the bounds
+            bounds = get_bounds(ax);
+            close(fig);
 
+            s = find_index(self.time,bounds(1));
+            e = find_index(self.time,bounds(2));
+            
+            % Do the slicing
+            self.time = self.time(s:e);
+            self.time = self.time - self.time(1);
+        
+            if ~isempty(self.accel)
+                self.accel = self.accel(s:e,:);
+            end
+        
+            if ~isempty(self.gyro)
+                self.gyro = self.gyro(s:e,:);
+            end
+            
+            if ~isempty(self.temp)
+                self.temp = self.temp(s:e);
+            end
+        
+            if ~isempty(self.mag)
+                self.mag = self.mag(s:e,:);
+            end
+        
+            if ~isempty(self.rpy_tag)
+                self.rpy_tag = self.rpy_tag(s:e,:);
+            end
+        
+            if ~isempty(self.rpy_whale)
+                self.rpy_whale = self.rpy_whale(s:e,:);
+            end
+        
+            if ~isempty(self.depth)
+                self.depth = self.depth(s:e);
+            end
+        end
         
 
         % Accel, gyro, and mag plot
@@ -302,4 +354,31 @@ classdef Tag
             self.mag = self.mag * rot;
         end
     end
+end
+
+function [bounds] = get_bounds(ax,num)
+    while (true)
+        % Draw one rectangle corresponding to time the tag is on the animal
+        drawrectangle(ax);
+    
+        % Confirm the drawings (user still has time to adjust the rectangles
+        % until confirming with `y + [ENTER]`
+        in_str = input('Confirm the drawn rectangles (Y, [N]): ', "s");
+    
+        if strcmpi(in_str, "Y")
+            break;
+        else
+            % Delete the rectangles and start again
+            for i = 1:num
+                rects = findobj(ax, 'Type', 'images.roi.Rectangle');
+                for r = 1:length(rects)
+                    delete(rects(r));
+                end
+            end
+        end
+    end
+    
+    bounds = NaN*zeros(1, 2);
+    rects = findobj(ax, 'Type', 'images.roi.Rectangle');
+    bounds(1, 1:2) = [rects(1).Position(1), rects(1).Position(1)+rects(1).Position(3)];
 end

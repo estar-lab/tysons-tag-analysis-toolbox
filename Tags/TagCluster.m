@@ -72,6 +72,13 @@ classdef TagCluster
 % so for the first one, calibrate_magnetometers() maps to
 % calibrate_magnetometer() for every tag object
         
+        % See Tag->trial_extraction
+        function self = trial_extractions(self)
+            for i = 1:length(self.Tags)
+                self.Tags{i} = self.Tags{i}.trial_extraction();
+            end
+        end
+        
         % this internally calls magcal from the sensor funsion toolbox on
         % each tag
         % IDEAL PROCEDURE TO CORRECT MAGNETOMETERS

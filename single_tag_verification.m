@@ -45,8 +45,10 @@ tags = tags.calibrate_magnetometers();
 tags = tags.normalize_magnetometers();
 tags = tags.adjust_balls();
 
-% Generate eulers 
+% Extract trial portion
+tags = tags.trial_extractions();
 
+% Generate eulers 
 tags = tags.eulers();
 
 %% Make Plots

@@ -12,7 +12,7 @@ function new_tag = slice(tag,bounds,name)
     end
 
     if ~isempty(new_tag.gyro)
-        new_tag.gyro = new_tag.gryo(s:e,:);
+        new_tag.gyro = new_tag.gyro(s:e,:);
     end
     
     if ~isempty(new_tag.temp)
