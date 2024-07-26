@@ -28,7 +28,7 @@ fullpath = filepath + "\" + filename;
 %   "dataLogger"
 %   "sliced_tag" (this is to be used if you ran the tag through a the
 %   TagSlicer first)
-% MTAGs are currently not supported
+%   "mtag"
 tag_type = "D4";
 tag1 = tag_importer(fullpath, tag_type, tag_name);
 
