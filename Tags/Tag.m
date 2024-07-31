@@ -294,7 +294,7 @@ classdef Tag
                     plot(self.time,self.rpy_tag(:,i))
                 end
                 legend("Roll","Pitch","Yaw")
-                ylabel("Euler Angles)")
+                ylabel("Degrees")
                 title(sprintf(self.name + " Tag Euler Angles"))
                 xlabel("Time (s)")
                 current_plot = current_plot + 1;
@@ -309,7 +309,7 @@ classdef Tag
                     plot(self.time,self.rpy_whale(:,i));
                 end
                 legend("Roll","Pitch","Yaw");
-                ylabel("Heading");
+                ylabel("Degrees");
                 title(sprintf(self.name + " Animal Euler Angles"));
                 xlabel("Time (s)");
                 current_plot = current_plot + 1;
