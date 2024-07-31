@@ -97,7 +97,7 @@ if isempty(plot_interval)
 end
 
 % Plot on/off switch.
-plot_on = false;
+plot_on = true;
 if plot_interval <= 0
   plot_on = false;
 else
