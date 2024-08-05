@@ -20,6 +20,9 @@ function tag = tag_importer(filename,tag_type,tag_name)
         case 'mTag'
             tag = mTag(filename,tag_name);
             return;
+        case 'mTag2'
+            tag = mTag2(filename,tag_name);
+            return;
         otherwise
             fprintf(tag_type + " is not a valid tag type\n");
             return;
