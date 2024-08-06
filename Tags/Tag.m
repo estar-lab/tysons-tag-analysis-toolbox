@@ -376,8 +376,9 @@ classdef Tag
         % Calls MATLAB's magcal() function. basically this fits the
         % magnetometer data to a ball. fixes ellipses, rotations, etc. 
         function self = calibrate_magnetometer(self)
-            [A,b,~]  = magcal(self.mag);
-            self.mag = (self.mag-b)*A;
+            sol = fit_ellipsoid(self.mag');
+            self.mag = ellipsoid_correction(self.mag', sol);
+            self.mag = self.mag';
         end
     end
 

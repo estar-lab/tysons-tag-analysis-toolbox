@@ -30,10 +30,10 @@ addpath(fullpath_lib);
 % 'filepath' would be the path into the folder that contains the folder mn24_010a\. For me that happens to be
 % "C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\"
 
-depid = 'DTAG401_test7';
+depid = 'mn23_198a';
 
 % Give the directory where the raw data is.
-filepath = 'C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\';
+filepath = 'C:\Users\tysonlin\Documents\Data\';
 
 %% Continue with script
 
@@ -131,6 +131,11 @@ T = apply_cal(T0,CAL.TEMP) ;			% apply cal to the temperature
 % careful calibration. It is however useful for compensating temperature
 % effects in the sensors. This is why it has to be calibrated first.
 
+% CAL.PRESS.poly = [294.48 -1.42]; % Tag 401
+% CAL.PRESS.poly = [2331.7 -88]; % Tag 402
+CAL.PRESS.poly = [1165.8 -43]; % Tag 402 (1000 m setting...scale divided by 2)
+% CAL.PRESS.poly = [2734.62 -154]; % Tag 404
+% CAL.PRESS.poly = [1367 -50]; % Tag 407 (1000 m setting...scale divided by 2)
 P = apply_cal(P0,CAL.PRESS,T) ;		% apply cal to the pressure
 
 % Apply the calibration and map to get the final tag-frame accelerometer data:

@@ -8,13 +8,13 @@ addpath(genpath("MTAG_Lib_Ding\"));
 %% CHANGE THIS STUFF
 
 % Same depid and filepath from data_extraction.m
-filepath = "G:\";
+filepath = "C:\Users\tysonlin\Documents\Data\mn23_198a";
 
 % The filename of the data that you want to import
-filename = "data76.csv";
+filename = "mn23_198a.mat";
 
 % tag_name is used to label plots, so you know which tag is which
-tag_name = "MTAG2";
+tag_name = "D402";
 
 %% Import Tags (MORE STUFF TO CHANGE)
 
@@ -30,7 +30,7 @@ fullpath = filepath + "\" + filename;
 %   TagSlicer first)
 %   "mTag"
 %   "mTag2"
-tag_type = "mTag2";
+tag_type = "D4";
 tag1 = tag_importer(fullpath, tag_type, tag_name);
 
 % I only care about data between 0 - 200000 seconds
@@ -40,14 +40,17 @@ range = [0 1000000];
 tags = TagCluster({tag1},false, range);
 
 %% Do data processing
-
-% Calibrate and verify magnetometers
-tags = tags.calibrate_magnetometers();
-tags = tags.normalize_magnetometers();
-tags = tags.adjust_balls();
+%  This section takes a long time and spits out a lot of warnings, don't
+%  worry
 
 % Extract trial portion
 tags = tags.trial_extractions();
+
+% Calibrate and verify magnetometers
+
+tags = tags.calibrate_magnetometers();
+tags = tags.adjust_balls();
+tags = tags.normalize_magnetometers();
 
 % Detect slide times
 tags = tags.slide_times();
