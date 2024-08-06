@@ -40,14 +40,12 @@ range = [0 1000000];
 tags = TagCluster({tag1},false, range);
 
 %% Do data processing
-%  This section takes a long time and spits out a lot of warnings, don't
-%  worry
 
 % Extract trial portion
+% This generates the plot where you have to draw the rectangle
 tags = tags.trial_extractions();
 
 % Calibrate and verify magnetometers
-
 tags = tags.calibrate_magnetometers();
 tags = tags.adjust_balls();
 tags = tags.normalize_magnetometers();
@@ -55,18 +53,33 @@ tags = tags.normalize_magnetometers();
 % Detect slide times
 tags = tags.slide_times();
 
+
+%% MORE STUFF TO CHANGE
+%  Stuff related to euler angles
+
 % Generate eulers 
 % Note: This function is the one that generates the many many plots, and these plots
 % can be very laggy. To toggle the plots, go to
 % MTAG_Lib_Ding->find_tag_orientation_func.m, and edit line 100
 tags = tags.eulers();
 
+% Runs a moving mean on the yaw for all the tags
+% Input to this function is the length of the window, in the number of
+% samples
+% This pipeline processes D4 data at 50 Hz
+% So a 1500 sample window equates to a 30 second moving mean
+% Change this as desired
+% This also generates a plot to see how the window filters the yaw
+tags = tags.moving_mean_yaw(1500);
+
 %% Make Plots
 for i = 1:length(tags.Tags)
     tags.Tags{i}.plot_core("Euler Angles");
 end
 
-tags.plot_magnetometer_balls();
+% This should be as close to a ball as possible
+tags.plot_magnetometer_balls("Final Magnetometer Balls");
+
 % tags.plot_accels("Acceleration All Tags");
 % tags.plot_mags("Magnetometer All Tags");
 % tags.plot_headings("Headings");

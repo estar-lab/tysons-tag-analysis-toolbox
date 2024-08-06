@@ -71,6 +71,24 @@ classdef TagCluster
 % these functions call the baseTag functions on every tag in the cluster
 % so for the first one, calibrate_magnetometers() maps to
 % calibrate_magnetometer() for every tag object
+
+        % Runs a moving mean on tag animal yaws
+        % k is the length of the window
+        function self = moving_mean_yaw(self, k)
+            fig = figure("Name","Moving Mean Plot"); clf(fig); hold on;
+            for i = 1:length(self.Tags)
+                axs(i) = subplot(length(self.Tags),1,i); hold on;
+                plot(self.Tags{i}.time,self.Tags{i}.rpy_whale(:,3));
+                self.Tags{i}.rpy_whale(:,3) = movmean(self.Tags{i}.rpy_whale(:,3), k);
+                %self.Tags{i}.rpy_whale(:,3) = lowpass(self.Tags{i}.rpy_whale(:,3), 0.0000000001);
+                plot(self.Tags{i}.time,self.Tags{i}.rpy_whale(:,3));
+                xlabel("Time (seconds)");
+                ylabel("Yaw (degrees)");
+                legend("Raw Yaw", "Filtered Yaw");
+                title("Moving Mean on Yaw")
+            end
+            linkaxes(axs, 'x');
+        end
         
         % See Tag->slide_time()
         function self = slide_times(self)
