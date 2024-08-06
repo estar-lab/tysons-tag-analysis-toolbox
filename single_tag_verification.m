@@ -1,5 +1,5 @@
 close all; clear; 
-
+%% 
 addpath(genpath("Tags\"));
 addpath(genpath("Lags\"));
 addpath(genpath("HelperFuncs\"));
@@ -11,7 +11,7 @@ addpath(genpath("MTAG_Lib_Ding\"));
 filepath = "G:\";
 
 % The filename of the data that you want to import
-filename = "data75.csv";
+filename = "data76.csv";
 
 % tag_name is used to label plots, so you know which tag is which
 tag_name = "MTAG2";
@@ -47,14 +47,16 @@ tags = tags.normalize_magnetometers();
 tags = tags.adjust_balls();
 
 % Extract trial portion
-%tags = tags.trial_extractions();
+tags = tags.trial_extractions();
 
-% Generate a synthetic "slide"
-%tags.Tags{1} = tags.Tags{1}.apply_rotation(1000,3000);
-%tags = tags.slide_times();
+% Detect slide times
+tags = tags.slide_times();
 
 % Generate eulers 
-%tags = tags.eulers();
+% Note: This function is the one that generates the many many plots, and these plots
+% can be very laggy. To toggle the plots, go to
+% MTAG_Lib_Ding->find_tag_orientation_func.m, and edit line 100
+tags = tags.eulers();
 
 %% Make Plots
 for i = 1:length(tags.Tags)
