@@ -407,7 +407,16 @@ classdef TagCluster
 
             fig = figure("Name",fig_name); clf(fig);
             for i = 1:length(self.Tags)
-                subplot(2,2,i); hold on; 
+                if length(self.Tags) == 1
+                    subplot(1,1,i); hold on; 
+                elseif length(self.Tags) == 2
+                    subplot(1,2,i); hold on;
+                elseif length(self.Tags) <= 4
+                    subplot(2,2,i); hold on;
+                elseif length(self.Tags) <= 6
+                    subplot(2,3,i); hold on;
+                end
+                
                 scatter3(self.Tags{i}.mag(:, 1), self.Tags{i}.mag(:, 2), self.Tags{i}.mag(:, 3), 4, 'filled');
                  
             
