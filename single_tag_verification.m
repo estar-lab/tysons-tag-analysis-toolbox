@@ -8,13 +8,13 @@ addpath(genpath("MTAG_Lib_Ding\"));
 %% CHANGE THIS STUFF
 
 % Same depid and filepath from data_extraction.m
-filepath = "C:\Users\tysonlin\Documents\Data\mn23_198a";
+filepath = "C:\Users\tysonlin\Documents\Data\mtag2-080724-1111";
 
 % The filename of the data that you want to import
-filename = "mn23_198a.mat";
+filename = "data77.csv";
 
 % tag_name is used to label plots, so you know which tag is which
-tag_name = "D402";
+tag_name = "mtag2";
 
 %% Import Tags (MORE STUFF TO CHANGE)
 
@@ -30,7 +30,7 @@ fullpath = filepath + "\" + filename;
 %   TagSlicer first)
 %   "mTag"
 %   "mTag2"
-tag_type = "D4";
+tag_type = "mTag2";
 tag1 = tag_importer(fullpath, tag_type, tag_name);
 
 % I only care about data between 0 - 200000 seconds
@@ -43,7 +43,7 @@ tags = TagCluster({tag1},false, range);
 
 % Extract trial portion
 % This generates the plot where you have to draw the rectangle
-tags = tags.trial_extractions();
+%tags = tags.trial_extractions();
 
 % Calibrate and verify magnetometers
 tags = tags.calibrate_magnetometers();
@@ -51,7 +51,7 @@ tags = tags.adjust_balls();
 tags = tags.normalize_magnetometers();
 
 % Detect slide times
-tags = tags.slide_times();
+%tags = tags.slide_times();
 
 
 %% MORE STUFF TO CHANGE
@@ -70,9 +70,10 @@ tags = tags.eulers();
 % So a 1500 sample window equates to a 30 second moving mean
 % Change this as desired
 % This also generates a plot to see how the window filters the yaw
-tags = tags.moving_mean_yaw(1500);
+%tags = tags.moving_mean_yaw(1500);
 
 %% Make Plots
+tags = tags.correct_eulers();
 for i = 1:length(tags.Tags)
     tags.Tags{i}.plot_core("Euler Angles");
 end

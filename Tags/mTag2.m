@@ -14,7 +14,7 @@ classdef mTag2 < Tag
             Fs = 50;
             new_time = old_time(1):(1/Fs):old_time(end);
             
-            self.accel = interp1(old_time, accel, new_time);
+            self.accel = interp1(old_time, accel, new_time) / 1000 * 9.81;
             self.mag = interp1(old_time, mag, new_time);
             self.gyro = interp1(old_time, gyro, new_time);
             self.depth = interp1(old_time, depth, new_time);
@@ -24,6 +24,7 @@ classdef mTag2 < Tag
         end
         
         function self = adjust(self)
+            self.mag(:,2) = self.mag(:,2) * -1;
         end
     end
 end
