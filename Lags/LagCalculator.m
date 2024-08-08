@@ -58,6 +58,7 @@ classdef LagCalculator
             % Calculate the lags
             self = self.calculate_lags();
 
+            self = self.zero_lags_at_start();
             
             self.plot_lags();
         end
@@ -74,7 +75,7 @@ classdef LagCalculator
                 self.tags{i}.lags(1) = 0;
             end
 
-            for i = 2:self.num_peaks
+            for i = 1:self.num_peaks
                 window_base = gen_window(self.base.p_locs(i),self.base.time,self.base.data,window_size);
                 
                 for j = 1:length(self.tags)
@@ -100,6 +101,7 @@ classdef LagCalculator
                 scatter(self.tags{i}.p_locs,self.tags{i}.p_vals,'kx');
                 xlabel("Time (seconds)");
                 title(self.tags{i}.name);
+                grid on;
             end
             axs(length(self.tags{i})) = subplot(length(self.tags)+1,1,1); hold on;
             plot(self.base.time,self.base.data);
@@ -107,20 +109,31 @@ classdef LagCalculator
             xlabel("Time (seconds)");
             title(self.base.name);
             linkaxes(axs,'x')
+            grid on;
         end
 
         function self = plot_lags(self)
             fig = figure("Name", "Lags"); clf(fig); hold on;
             for i = 1:length(self.tags)
                 axs(i) = subplot(length(self.tags),1,i); hold on;
-
                 scatter(self.tags{i}.p_locs,self.tags{i}.lags);
                 xlabel("Time (seconds)")
                 ylabel("Lag (seconds)")
-                title(self.tags{i}.name)
+                title(self.tags{i}.name + " vs. " + self.base.name);
+                grid on;
             end
             linkaxes(axs,'x');
-            grid on;
+           
+        end
+
+        
+    end
+
+    methods (Access = private)
+        function self = zero_lags_at_start(self)
+            for i = 1:length(self.tags)
+                self.tags{i}.lags = self.tags{i}.lags - self.tags{i}.lags(1);
+            end
         end
     end
 end

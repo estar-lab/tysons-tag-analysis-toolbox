@@ -30,10 +30,10 @@ addpath(fullpath_lib);
 % 'filepath' would be the path into the folder that contains the folder mn24_010a\. For me that happens to be
 % "C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\"
 
-depid = 'mn23_198a';
+depid = 'd401_drift_try2';
 
 % Give the directory where the raw data is.
-filepath = 'C:\Users\tysonlin\Documents\Data\';
+filepath = 'C:\Users\tysonlin\Documents\Data\drift_test-080724-1606\';
 
 %% Continue with script
 

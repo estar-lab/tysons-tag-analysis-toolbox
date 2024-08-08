@@ -33,7 +33,10 @@ classdef LagObject
         %       'az' : z-acceleration
         function self = LagObject(tag,which_data,peak_height,peak_width)
             if strcmp(which_data,'az')
-                self.data = tag.accel(:,3);
+                % For the lags it is helpful to invert the z-acceleration.
+                % There are typically more extreme peaks in the negative
+                % direction
+                self.data = tag.accel(:,3) * -1;
             end
             self.name = tag.name;
             self.time = tag.time;

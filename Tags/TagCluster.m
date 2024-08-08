@@ -637,7 +637,7 @@ classdef TagCluster
                 axs(i) = subplot(length(sync_signals),1,i);
                 plot(sync_signals{i});
                 title("Draw a Rectangle Around the Portion of the Signal that You Want to Use as the Basis for" + ...
-                    "Synchronization")
+                    " Synchronization")
             end
             linkaxes(axs, 'x');
             bounds = get_crosscorrelation_bounds(axs);

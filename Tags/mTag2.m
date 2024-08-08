@@ -24,6 +24,8 @@ classdef mTag2 < Tag
         end
         
         function self = adjust(self)
+            self.accel(:,3) = self.accel(:,3) * -1;
+
             self.mag(:,2) = self.mag(:,2) * -1;
         end
     end

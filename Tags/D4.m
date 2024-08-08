@@ -4,7 +4,6 @@ classdef D4 < Tag
     
     methods
         function self = D4(filename,name)
-            fprintf("Importing " + name + " as a D4\n");
             load(filename);
             self.accel = A.data;
             self.mag = M.data;
