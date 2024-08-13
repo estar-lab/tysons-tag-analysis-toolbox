@@ -33,7 +33,9 @@ classdef Tag
         name
 
         ball
+
         slides
+        rot_matrices
     end
 
     methods (Abstract)
@@ -102,7 +104,8 @@ classdef Tag
                         for i = 1:length(self.slides)-1
                             s = self.slides(i);
                             e = self.slides(i+1);
-                            self = self.orient_into_whale_frame(s,e);
+                            [self,rot] = self.orient_into_whale_frame(s,e);
+                            self.rot_matrices{i} = rot;
                         end
     
                         [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
@@ -115,7 +118,7 @@ classdef Tag
                     else
                         s = 1;
                         e = length(self.time);
-                        self = self.orient_into_whale_frame(s,e);
+                        [self,~] = self.orient_into_whale_frame(s,e);
     
                         [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
                         [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
@@ -189,8 +192,9 @@ classdef Tag
         % Find slide times
         function self = slide_time(self)
             [section_idx_list, ~, ~] = ...
-                find_tag_slide_times_func(self.accel, self.depth, 50, 10, 0.5);
+                find_tag_slide_times_func(self.accel, self.depth, 50, 10, 0.45);
             self.slides = section_idx_list;
+            self.rot_matrices = cell(1,length(section_idx_list)-1);
         end
 
         % Rotate part of the dataset
@@ -409,7 +413,7 @@ classdef Tag
         
         % Change tag frame into whale frame
         % s and e are the start and end indexes of the window
-        function self = orient_into_whale_frame(self, s, e)
+        function [self,rot] = orient_into_whale_frame(self, s, e)
             [rot,~] = find_tag_orientation_func(self.accel(s:e,:), self.depth(s:e,:),50);
             self.accel(s:e,:) = self.accel(s:e,:) * rot;
             self.mag(s:e,:) = self.mag(s:e,:) * rot;
