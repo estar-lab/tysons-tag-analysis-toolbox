@@ -8,6 +8,8 @@ classdef mTag2 < Tag
             accel = [data.Accel_X data.Accel_Y data.Accel_Z];
             gyro = [data.Gyro_X data.Gyro_Y data.Gyro_Z];
             mag = [data.Mag_X data.Mag_Y data.Mag_Z];
+            temp_imu = data.Temperature_IMU;
+            temp_pres = data.Temperature;
             depth = data.Depth;
 
             old_time = data.Time / 1e3;
@@ -19,6 +21,8 @@ classdef mTag2 < Tag
             self.gyro = interp1(old_time, gyro, new_time);
             self.depth = interp1(old_time, depth, new_time);
             self.depth = self.depth';
+            self.temp_imu = interp1(old_time, temp_imu, new_time);
+            self.temp_pres = interp1(old_time, temp_pres, new_time);
             self.time = new_time';
             self.name = name;
         end

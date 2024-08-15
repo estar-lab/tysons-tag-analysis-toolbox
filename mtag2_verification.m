@@ -3,13 +3,14 @@ close all; clear;
 
 %% Manage libraries
 addpath(genpath("Tags\"));
+addpath(genpath("HelperFuncs\"));
 
 %% Data Settings
-filepath = "C:\Users\tyson\Documents\ESTAR\Data\MTAG2-081424-1632";
-filename = "data105.csv";
+filepath = "C:\Users\tysonlin\Documents\Data\mtag2-081524-1103";
+filename = "data108.csv";
 
-% Using for naming plots
-tag_name = "MTAG2";
+% Used for naming plots
+tag_name = "Unverified MTAG2";
 
 % Specifies which tag to construct. Do not change in this script. 
 tag_type = "mTag2";
@@ -19,8 +20,16 @@ fullpath = filepath + "\" + filename;
 tag = tag_importer(fullpath, tag_type, tag_name);
 clear filename filepath fullpath tag_name tag_type
 
-%% Make acceleration plot
+%% Import Tag for Comparison
+ref = tag_importer("ReferenceData\mtag2_accel.csv", "mTag2", "Correct MTAG2");
 
+%% Make acceleration plot
+tags = TagCluster({ref,tag}, false);
+tags.plot_accels();
+
+%% Temperature plot
+tag.plot_temperatures();
 
 %% Clean up libraries
 rmpath(genpath("Tags\"));
+rmpath(genpath("HelperFuncs\"));

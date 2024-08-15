@@ -14,8 +14,10 @@ classdef Tag
         % dps
         gyro
 
-        % C
-        temp
+        % Celcius
+        % Temperature can come from two different souces
+        temp_pres
+        temp_imu
 
         % units irrelevant. magnetometer data is always normalized to 1
         % before doing any further processing
@@ -346,6 +348,18 @@ classdef Tag
             legend("Roll","Pitch","Yaw")
             ylabel("Degrees")
             xlabel("Time (seconds)")
+        end
+
+        % Plot temperatures
+        function self = plot_temperatures(self)
+            fig = figure; clf(fig);
+            hold on;
+            plot(self.time, self.temp_imu, 'r-');
+            plot(self.time, self.temp_pres, 'b-');
+            legend("IMU Temperature", "Pressure Sensor Temperature");
+            ylabel("Temperature (C)");
+            xlabel("Time (seconds)");
+            title(self.name + " temperature. Measurments from both sensors should be comparable.");
         end
 
         % This fits a ball to the magnetometer data, and centers the data

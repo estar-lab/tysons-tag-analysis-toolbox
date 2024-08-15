@@ -38,8 +38,13 @@ classdef TagCluster
             % contains a bunch of random data from moving the tags around. 
             % use these indexes to chop off the beginning and end of a
             % dataset. units are in seconds.
-            start_time = window(1); 
-            end_time = window(2);
+            if ~exist('fig_name','var')
+                start_time = 0;
+                end_time = 100000000000;
+            else
+                start_time = window(1); 
+                end_time = window(2);
+            end
 
             for i = 1:length(self.Tags)
                 start_index = find_index(self.Tags{i}.time, start_time);
@@ -177,6 +182,9 @@ classdef TagCluster
         % Plot acceleration data for all tags
         % Each tag gets its own subplot
         function self = plot_accels(self,fig_name)
+            if ~exist('fig_name','var')
+                fig_name = "All Tags Acceleration";
+            end
             disp("Plotting accelerometer data")
             fig = figure("Name",fig_name); clf(fig);
             
