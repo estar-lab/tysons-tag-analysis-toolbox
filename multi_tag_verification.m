@@ -13,10 +13,10 @@
 
 close all; clear; 
 
-addpath(genpath("Tags\"));
-addpath(genpath("Lags\"));
-addpath(genpath("HelperFuncs\"));
-addpath(genpath("MTAG_Lib_Ding\"));
+addpath(genpath("Internal_Libs\Tags\"));
+addpath(genpath("Internal_Libs\Lags\"));
+addpath(genpath("Internal_Libs\HelperFuncs\"));
+addpath(genpath("External_Libs\MTAG_Lib_Ding\"));
 
 %% CHANGE THIS STUFF
 
@@ -94,7 +94,7 @@ tags = tags.lag_characterization(1,[10,10,10],200);
 
 %% Clean up libaries
 
-rmpath(genpath("Tags\"));
-rmpath(genpath("Lags\"));
-rmpath(genpath("HelperFuncs\"));
-rmpath(genpath("MTAG_Lib_Ding\"));
+rmpath(genpath("Internal_Libs\Tags\"));
+rmpath(genpath("Internal_Libs\Lags\"));
+rmpath(genpath("Internal_Libs\HelperFuncs\"));
+rmpath(genpath("External_Libs\MTAG_Lib_Ding\"));

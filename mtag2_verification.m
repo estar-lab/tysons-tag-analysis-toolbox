@@ -2,12 +2,12 @@
 close all; clear;
 
 %% Manage libraries
-addpath(genpath("Tags\"));
-addpath(genpath("HelperFuncs\"));
+addpath(genpath("Internal_Libs\Tags\"));
+addpath(genpath("Internal_Libs\HelperFuncs\"));
 
 %% Data Settings
-filepath = "C:\Users\tysonlin\Documents\Data\mtag2-081524-1103";
-filename = "data108.csv";
+filepath = "H:\";
+filename = "data7.csv";
 
 % Used for naming plots
 tag_name = "Unverified MTAG2";
@@ -31,5 +31,5 @@ tags.plot_accels();
 tag.plot_temperatures();
 
 %% Clean up libraries
-rmpath(genpath("Tags\"));
-rmpath(genpath("HelperFuncs\"));
+rmpath(genpath("Internal_Libs\Tags\"));
+rmpath(genpath("Internal_Libs\HelperFuncs\"));

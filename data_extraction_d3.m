@@ -1,8 +1,6 @@
 close all; clear;
 
-lib = "DTAG3_Analysis\";
-fullpath_lib = genpath(lib);
-addpath(fullpath_lib);
+addpath(genpath("External_Libs\DTAG3_Analysis\"));
 
 %% FIRST-TIME SETUP: Run this section to select main tag data directory
 
@@ -178,4 +176,4 @@ fullpath = filepath + "\" + filename;
 save(fullpath, 'TagData');
 
 %% Clean up libraries
-rmpath(fullpath_lib);
+rmpath(genpath("External_Libs\DTAG3_Analysis\"));

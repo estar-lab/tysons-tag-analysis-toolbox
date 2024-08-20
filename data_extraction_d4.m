@@ -1,8 +1,6 @@
 clear; close all;
 
-lib = "DTAG4_Analysis\";
-fullpath_lib = genpath(lib);
-addpath(fullpath_lib);
+addpath(genpath("External_Libs\DTAG4_Analysis\"));
 
 % Pick an appropriate deployment id. Usually you would follow the standard
 % DTAG protocol of: 2-letter Latin species initials, 2-digit year, underscore,
@@ -168,4 +166,4 @@ fullpath = recdir + "\" + filename;
 save(fullpath, 'A', 'M','P','time');
 
 %% Clean up libaries
-rmpath(fullpath_lib);
+addpath(genpath("External_Libs\DTAG4_Analysis\"));
