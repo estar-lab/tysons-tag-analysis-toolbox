@@ -6,8 +6,8 @@ addpath(genpath("Internal_Libs\Tags\"));
 addpath(genpath("Internal_Libs\HelperFuncs\"));
 
 %% Data Settings
-filepath = "H:\";
-filename = "data7.csv";
+filepath = "C:\Users\tyson\OneDrive\Documents\GitHub\tysons-tag-analysis-toolbox\ReferenceData";
+filename = "mtag2_accel.csv";
 
 % Used for naming plots
 tag_name = "Unverified MTAG2";

@@ -390,7 +390,7 @@ classdef Tag
             legend(names);
             ylabel("Temperature (C)");
             xlabel("Time (seconds)");
-            title(self.name + " temperature. Measurments from both sensors should be comparable.");
+            title(self.name + " temperature. Sensors should be within 1-2 degrees C of each other.");
         end
 
         % This fits a ball to the magnetometer data, and centers the data
