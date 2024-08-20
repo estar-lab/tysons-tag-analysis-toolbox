@@ -93,12 +93,12 @@ classdef Tag
             if algo == 1
                 % Generate tag frame eulers
                 [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
-                [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
+                [pitch, yaw, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
                     calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
 
-                self.rpy_tag(:,1) = roll_filt_nv;
-                self.rpy_tag(:,2) = pitch_filt_nv;
-                self.rpy_tag(:,3) = yaw_filt_nv;
+                self.rpy_tag(:,1) = roll_niv;
+                self.rpy_tag(:,2) = pitch_niv;
+                self.rpy_tag(:,3) = yaw_niv;
                 
                 % Generate whale frame eulers
                 if ~isempty(self.depth)
