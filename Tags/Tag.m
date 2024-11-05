@@ -29,6 +29,9 @@ classdef Tag
 
         % depth (meters)
         depth
+
+        % speed (?)
+        speed
         
         name
 
