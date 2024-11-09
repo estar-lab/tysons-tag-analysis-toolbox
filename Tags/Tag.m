@@ -33,6 +33,9 @@ classdef Tag
         % speed (?)
         speed
         
+        % NIRS IR data
+        IR
+        
         name
 
         ball
@@ -345,6 +348,14 @@ classdef Tag
             legend("Roll","Pitch","Yaw")
             ylabel("Degrees")
             xlabel("Time (seconds)")
+        end
+
+        function self = plot_IR(self) 
+            fig = figure; clf(fig);
+            hold on;
+            plot(self.time, self.IR);
+            xlabel("Time (seconds)")
+            grid on;
         end
 
         % This fits a ball to the magnetometer data, and centers the data

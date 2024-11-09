@@ -7,17 +7,19 @@ classdef mTag21 < Tag
             depth = [];
 
             n = readtable(file_paths(1,:));
-            accel = [n.AccelX n.AccelY n.AccelZ] / 1000 * 9.8;
-            gyro = [n.GyroX n.GyroY n.GyroZ];
-            mag = [n.MagX n.MagY n.MagZ];
-            speed = n.Speed;
+            accel = [n.Accel_X n.Accel_Y n.Accel_Z] / 1000 * 9.8;
+            gyro = [n.Gyro_X n.Gyro_Y n.Gyro_Z];
+            mag = [n.Mag_X n.Mag_Y n.MagZ];
+            speed = n.Speed_Pulses;
 
-            old_time = n.Time;
+            old_time = n.Time / 1000;
+
+            IR = n.IR;
 
             depth = n.Pressure;
             depth = depth(~isnan(depth));
-
-            new_time = min(old_time):200:max(old_time);
+            
+            new_time = min(old_time):0.1:max(old_time);
             new_time = new_time';
             
             self.depth = interp1(old_time, depth, new_time);
@@ -27,6 +29,7 @@ classdef mTag21 < Tag
             self.speed = interp1(old_time, speed, new_time);
             self.time = new_time;
             self.name = name;
+            self.IR = interp1(old_time, IR, new_time);
             
         end
 
