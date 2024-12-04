@@ -535,6 +535,9 @@ classdef TagCluster
         % All yaws on one plot
         % All pitches on one plot
         function self = plot_eulers_compare(self, fig_name)
+            if ~exist('fig_name','var')
+                fig_name = "Eulers Compare";
+            end
             fig = figure("Name",fig_name); clf(fig);
 
             names(1:length(self.Tags)) = {0};

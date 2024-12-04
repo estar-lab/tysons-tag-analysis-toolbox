@@ -19,7 +19,7 @@ classdef mTag21 < Tag
             depth = n.Pressure;
             depth = depth(~isnan(depth));
             
-            new_time = min(old_time):0.1:max(old_time);
+            new_time = min(old_time):0.05:max(old_time);
             new_time = new_time';
             
             self.depth = interp1(old_time, depth, new_time);
@@ -34,6 +34,17 @@ classdef mTag21 < Tag
         end
 
         function self = adjust(self) 
+            temp = self.accel(:,1);
+            self.accel(:,1) = self.accel(:,2) * -1;
+            self.accel(:,2) = temp * -1;
+            
+            temp = self.gyro(:,1);
+            self.gyro(:,1) = self.gyro(:,2);
+            self.gyro(:,2) = temp * -1;
+            
+            temp = self.mag(:,1);
+            self.mag(:,1) = self.mag(:,2) * -1;
+            self.mag(:,2) = temp * -1;
         end
     end
 end

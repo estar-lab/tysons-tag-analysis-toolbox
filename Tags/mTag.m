@@ -9,9 +9,7 @@ classdef mTag < Tag
             gyro = [];
             depth = [];
             for i = 1:length(file_paths)
-                opts = detectImportOptions(file_paths(i,:),'NumHeaderLines',0);
-
-                n = readtable(file_paths(i,:));
+                n = readtable(file_paths(i,:), 'TreatAsEmpty', '');
                 accel = [accel; ...
                          n.accelX n.accelY n.accelZ];
                 gyro = [gyro; ...

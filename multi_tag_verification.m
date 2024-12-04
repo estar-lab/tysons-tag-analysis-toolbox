@@ -22,11 +22,9 @@ addpath(genpath("MTAG_Lib_Ding\"));
 
 % Same depid and filepath from data_extraction.m
 filepath = "C:\Users\tyson\OneDrive\Documents\GitHub\mtag2.1\data\orientation-12-4-1530";
-filepath = "C:\Users\tyson\Documents\ESTAR\Data\test4\MTAG_test4";
 
 % The filename of the data that you want to import
-filename = "mtag.csv";
-filename = "000123T230739.csv";
+filename = "modded-mtag.csv";
 
 % tag_name is used to label plots, so you know which tag is which
 tag_name = "Old MTAG";
@@ -48,7 +46,7 @@ tag1 = tag_importer(fullpath, 'mTag', tag_name);
 
 %% Repeat for next tag (you can import as many tags as you want
 filepath = "C:\Users\tyson\OneDrive\Documents\GitHub\mtag2.1\data\orientation-12-4-1530";
-filename = "mtag2.1";
+filename = "mtag2.1.csv";
 tag_name = "MTAG 2.1";
 fullpath = filepath + "\" + filename;
 tag2 = tag_importer(fullpath, 'mTag2.1', tag_name);
@@ -64,6 +62,8 @@ tags = TagCluster({tag1,tag2},false, range);
 
 %% Do data processing
 
+tags = tags.trial_extractions();
+
 % Calibrate and verify magnetometers
 tags = tags.calibrate_magnetometers();
 tags = tags.normalize_magnetometers();
@@ -72,7 +72,7 @@ tags = tags.adjust_balls();
 % Generate eulers 
 tags = tags.eulers();
 
-%tags = tags.trial_extractions();
+
 
 
 %% Make Plots
@@ -82,11 +82,14 @@ end
 
 tags = tags.correct_eulers();
 
-for i = 1:length(tags.Tags)
-    tags.Tags{i}.plot_core("sin(Euler Angles)");
-end
+% for i = 1:length(tags.Tags)
+%     tags.Tags{i}.plot_core("sin(Euler Angles)");
+% end
 
-%tags.plot_magnetometer_balls();
+tags.plot_magnetometer_balls();
+
+tags.plot_accels_mags_compare();
+tags.plot_eulers_compare();
 % tags.plot_accels("Acceleration All Tags");
 % tags.plot_mags("Magnetometer All Tags");
 % tags.plot_headings("Headings");
