@@ -5,14 +5,15 @@ addpath(genpath("HelperFuncs\"));
 addpath(genpath("MTAG_Lib_Ding\"));
 
 %% CHANGE THIS STUFF
-filepath = "C:\Users\tyson\Downloads\data-34.txt";
+filepath = "C:\Users\tyson\Downloads\fakedolphin";
 
 % tag_name is used to label plots, so you know which tag is which
-tag_name = "MTag2.1";
+tag_name = "Example Dolphin";
 
 tag_type = "mTag2.1";
 
 tag = tag_importer(filepath, tag_type, tag_name);
+tag = tag.trial_extraction();
 tag.plot_core("Master Plot");
 tag.plot_IR();
 

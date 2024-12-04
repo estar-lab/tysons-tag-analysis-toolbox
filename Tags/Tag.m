@@ -190,6 +190,10 @@ classdef Tag
             if ~isempty(self.depth)
                 self.depth = self.depth(s:e);
             end
+
+            if ~isempty(self.IR)
+                self.IR = self.IR(s:e);
+            end
         end
         
         % Find slide times
@@ -241,6 +245,7 @@ classdef Tag
 
             fprintf("Plotting core data for " + self.name + "\n");
             fig = figure("Name",fig_name); clf(fig);
+            fontsize(fig, 24, "points")
 
             % Calculate Number of Plots Based on Available Data
             vars = [~isempty(self.accel) ...
@@ -285,7 +290,7 @@ classdef Tag
                     plot(self.time,self.mag(:,i))
                 end
                 legend("X","Y","Z")
-                ylabel("Magnetometer (units?)")
+                ylabel("Magnetometer (uT)")
                 title(sprintf(self.name + " Magnetometer"))
                 xlabel("Time (s)")
                 current_plot = current_plot + 1;
