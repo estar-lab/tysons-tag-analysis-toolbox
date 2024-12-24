@@ -283,7 +283,7 @@ classdef TagCluster
             labels = ["X" "Y" "Z"];
 
             for i = 1:3
-                axs(2*i-1) = subplot(3,2,2*i-1); hold on;
+                axs(2*i-1) = subplot(3,3,i); hold on;
                 for j = 1:length(self.Tags)
                     plot(self.Tags{j}.time,self.Tags{j}.accel(:,i));
                 end
@@ -293,7 +293,7 @@ classdef TagCluster
                 xlabel("Time (s)");
                 grid on;
 
-                axs(2*i) = subplot(3,2,2*i); hold on;
+                axs(2*i) = subplot(3,3,i+3); hold on;
                 for j = 1:length(self.Tags)
                     plot(self.Tags{j}.time,self.Tags{j}.mag(:,i));
                 end
@@ -303,6 +303,36 @@ classdef TagCluster
                 xlabel("Time (s)");
                 grid on;
             end
+
+            axs(7) = subplot(3,3,7); hold on;
+            for j = 1:length(self.Tags)
+                plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,1));
+            end
+            legend(names)
+            xlabel("Time (seconds)")
+            ylabel("")
+            title("Roll")
+            grid on;
+
+            axs(8) = subplot(3,3,8); hold on;
+            for j = 1:length(self.Tags)
+                plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,2));
+            end
+            legend(names)
+            xlabel("Time (seconds)")
+            ylabel("")
+            title("Pitch")
+            grid on;
+
+            axs(9) = subplot(3,3,9); hold on;
+            for j = 1:length(self.Tags)
+                plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,3));
+            end
+            legend(names)
+            xlabel("Time (seconds)")
+            ylabel("")
+            title("Yaw")
+            grid on;
             linkaxes(axs,'x');
         end
 
@@ -545,7 +575,7 @@ classdef TagCluster
                 names{i} = self.Tags{i}.name;
             end
 
-            axs(1) = subplot(3,1,1); hold on;
+            axs(1) = subplot(1,3,1); hold on;
             for j = 1:length(self.Tags)
                 plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,1));
             end
@@ -555,7 +585,7 @@ classdef TagCluster
             title("Roll")
             grid on;
 
-            axs(2) = subplot(3,1,2); hold on;
+            axs(2) = subplot(1,3,2); hold on;
             for j = 1:length(self.Tags)
                 plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,2));
             end
@@ -565,7 +595,7 @@ classdef TagCluster
             title("Pitch")
             grid on;
 
-            axs(3) = subplot(3,1,3); hold on;
+            axs(3) = subplot(1,3,3); hold on;
             for j = 1:length(self.Tags)
                 plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,3));
             end

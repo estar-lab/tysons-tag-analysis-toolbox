@@ -88,7 +88,7 @@ classdef Tag
                     quaternion(t, :) = AHRS.Quaternion;
                 end
                 euler = quatern2euler(quaternConj(quaternion)) * (180/pi);	% use conjugate for sensor frame relative to Earth and convert to degrees.
-                self.rpy = euler;
+                self.rpy_tag = euler;
                 self = self.euler_to_heading();
             end
 
@@ -194,6 +194,14 @@ classdef Tag
             if ~isempty(self.IR)
                 self.IR = self.IR(s:e);
             end
+
+            if ~isempty(self.speed) 
+                self.speed = self.speed(s:e);
+            end
+
+            if ~isempty(self.temp)
+                self.temp = self.temp(s:e);
+            end
         end
         
         % Find slide times
@@ -253,7 +261,8 @@ classdef Tag
                     ~isempty(self.mag)   ...
                     ~isempty(self.rpy_tag)   ...
                     ~isempty(self.rpy_whale) ...
-                    ~isempty(self.depth)];
+                    ~isempty(self.depth) ...
+                    ~isempty(self.speed)];
             num_plots = sum(vars);
             current_plot = 1;
 
@@ -340,6 +349,18 @@ classdef Tag
                 fprintf("\tNo depth data for " + self.name + "\n");
             end
 
+            % Speed plot
+            if ~isempty(self.speed)
+                axs(current_plot) = subplot(num_plots,1,current_plot); hold on;
+                plot(self.time, self.speed);
+                ylabel("Speed");
+                title(sprintf(self.name + " Speed"));
+                xlabel("Time (s)");
+                current_plot = current_plot + 1;
+            else
+                fprintf("\tNo speed data for " + self.name + "\n");
+            end
+
             linkaxes(axs,'x')
         end
         
@@ -360,6 +381,28 @@ classdef Tag
             hold on;
             plot(self.time, self.IR);
             xlabel("Time (seconds)")
+            ylabel("(???) (???)")
+            title("NIRS Plot");
+            grid on;
+        end
+
+        function self = plot_speed(self)
+            fig = figure; clf(fig);
+            hold on;
+            plot(self.time, self.speed);
+            xlabel("Time (seconds)");
+            ylabel("Speed (pulse counts)")
+            title("Speed plot");
+            grid on;
+        end
+
+        function self = plot_temp(self)
+            fig = figure; clf(fig);
+            hold on;
+            plot(self.time, self.temp);
+            xlabel("Time (seconds)");
+            ylabel("Temperature (C)")
+            title("Temperature Plot");
             grid on;
         end
 

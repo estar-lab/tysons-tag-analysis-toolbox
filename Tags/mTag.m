@@ -16,8 +16,9 @@ classdef mTag < Tag
                          n.gyroX n.gyroY n.gyroZ];
                 mag = [mag; ...
                          n.magX n.magY n.magZ];
-                depth = [depth; n.depth];
+                %depth = [depth; n.depth];
             end
+            depth = zeros(length(accel),1);
             depth = depth(~isnan(depth));
             depth_time = 0.2:0.2:0.2*length(depth);
             

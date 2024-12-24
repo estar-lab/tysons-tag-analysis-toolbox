@@ -18,8 +18,11 @@ classdef mTag21 < Tag
 
             depth = n.Pressure;
             depth = depth(~isnan(depth));
+
+            temp = n.Temp / 100;
             
-            new_time = min(old_time):0.05:max(old_time);
+            %new_time = min(old_time):0.1:max(old_time);
+            new_time = min(old_time):0.02:max(old_time);
             new_time = new_time';
             
             self.depth = interp1(old_time, depth, new_time);
@@ -30,6 +33,7 @@ classdef mTag21 < Tag
             self.time = new_time;
             self.name = name;
             self.IR = interp1(old_time, IR, new_time);
+            self.temp = interp1(old_time, temp, new_time);
             
         end
 

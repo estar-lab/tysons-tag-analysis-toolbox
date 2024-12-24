@@ -21,7 +21,7 @@ addpath(genpath("MTAG_Lib_Ding\"));
 %% CHANGE THIS STUFF
 
 % Same depid and filepath from data_extraction.m
-filepath = "C:\Users\tyson\OneDrive\Documents\GitHub\mtag2.1\data\orientation-12-4-1530";
+filepath = "C:\Users\tyson\Documents\ESTAR\473-data";
 
 % The filename of the data that you want to import
 filename = "modded-mtag.csv";
@@ -45,7 +45,7 @@ fullpath = filepath + "\" + filename;
 tag1 = tag_importer(fullpath, 'mTag', tag_name);
 
 %% Repeat for next tag (you can import as many tags as you want
-filepath = "C:\Users\tyson\OneDrive\Documents\GitHub\mtag2.1\data\orientation-12-4-1530";
+filepath = "C:\Users\tyson\Documents\ESTAR\473-data";
 filename = "mtag2.1.csv";
 tag_name = "MTAG 2.1";
 fullpath = filepath + "\" + filename;
@@ -58,7 +58,7 @@ tag2 = tag_importer(fullpath, 'mTag2.1', tag_name);
 range = [0 10000];
 
 tags = TagCluster({tag1,tag2},false, range);
-%tags = tags.sync_tags();
+tags = tags.sync_tags();
 
 %% Do data processing
 
@@ -71,8 +71,6 @@ tags = tags.adjust_balls();
 
 % Generate eulers 
 tags = tags.eulers();
-
-
 
 
 %% Make Plots
@@ -93,7 +91,7 @@ tags.plot_eulers_compare();
 % tags.plot_accels("Acceleration All Tags");
 % tags.plot_mags("Magnetometer All Tags");
 % tags.plot_headings("Headings");
-% tags.plot_eulers("Eulers");
+%tags.plot_eulers("Eulers");
 
 %% Clean up libaries
 
