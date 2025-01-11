@@ -1,6 +1,6 @@
 clear; close all;
 
-lib = "DTAG4_Analysis\";
+lib = "DTAG4_Analysis";
 fullpath_lib = genpath(lib);
 addpath(fullpath_lib);
 
@@ -30,10 +30,10 @@ addpath(fullpath_lib);
 % 'filepath' would be the path into the folder that contains the folder mn24_010a\. For me that happens to be
 % "C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\"
 
-depid = 'DTAG401_test7';
+depid = 'Pressure_Test';
 
 % Give the directory where the raw data is.
-filepath = 'C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\';
+filepath = 'D:\Maui2025\Sensor-Testing\D405\';
 
 %% Continue with script
 

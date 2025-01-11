@@ -608,6 +608,47 @@ classdef TagCluster
             linkaxes(axs, 'x');
         end
 
+        function plot_depths_compare(self, fig_name)            
+            if ~exist('fig_name','var')
+                fig_name = "Depths Compare";
+            end
+            fig = figure("Name",fig_name); clf(fig);
+            hold on;
+
+            names(1:length(self.Tags)) = {0};
+            for i = 1:length(self.Tags)
+                names{i} = self.Tags{i}.name;
+            end
+
+            for i = 1:length(self.Tags)
+                plot(self.Tags{i}.depth);
+            end
+            legend(names);
+            xlabel("Time (seconds)");
+            ylabel("Depth (m)");
+            title("Depths");
+            grid on;
+        end
+
+        function plot_depths(self, fig_name)
+            if ~exist('fig_name','var')
+                fig_name = "Depths";
+            end
+            fig = figure("Name",fig_name); clf(fig);
+            hold on;
+
+            for i = 1:length(self.Tags)
+                subplot(length(self.Tags),1,i);
+                plot(self.Tags{i}.depth);
+                title(self.Tags{i}.name);
+                xlabel("Time (seconds)");
+                ylabel("Depth (m)");
+                grid on;
+            end
+        end
+            
+            
+
 %% SPECIAL FUNCTIONS
 % These functions do special things
 

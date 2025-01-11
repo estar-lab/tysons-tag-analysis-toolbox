@@ -8,13 +8,13 @@ addpath(genpath("MTAG_Lib_Ding\"));
 %% CHANGE THIS STUFF
 
 % Same depid and filepath from data_extraction.m
-filepath = "C:\Users\tyson\OneDrive\Documents\GitHub\mtag2.1\data\orientation-12-4-1530";
+filepath = "D:\Maui2025\Tag_Data\mn25_009a";
 
 % The filename of the data that you want to import
-filename = "modded-mtag.csv";
+filename = "mn25_009a.mat";
 
 % tag_name is used to label plots, so you know which tag is which
-tag_name = "MTAG 2.1";
+tag_name = "mn25_009a";
 
 %% Import Tags (MORE STUFF TO CHANGE)
 
@@ -29,7 +29,7 @@ fullpath = filepath + "\" + filename;
 %   "sliced_tag" (this is to be used if you ran the tag through a the
 %   TagSlicer first)
 % MTAGs are currently not supported
-tag_type = "mTag";
+tag_type = "D3";
 tag1 = tag_importer(fullpath, tag_type, tag_name);
 
 % I only care about data between 0 - 200000 seconds
@@ -52,7 +52,7 @@ tags = tags.adjust_balls();
 
 % Generate a synthetic "slide"
 %tags.Tags{1} = tags.Tags{1}.apply_rotation(1000,3000);
-%tags = tags.slide_times();
+tags = tags.slide_times();
 
 % Generate eulers 
 tags = tags.eulers();

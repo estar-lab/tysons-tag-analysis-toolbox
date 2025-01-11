@@ -4,6 +4,8 @@ classdef D3 < Tag
     
     methods
         function self = D3(filename, name)
+            fprintf("Importing " + name + " as a D3\n");
+
             load(filename);
 
             old_time = TagData.timeSec;

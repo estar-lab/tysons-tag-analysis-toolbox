@@ -21,13 +21,13 @@ addpath(genpath("MTAG_Lib_Ding\"));
 %% CHANGE THIS STUFF
 
 % Same depid and filepath from data_extraction.m
-filepath = "C:\Users\tyson\Documents\ESTAR\473-data";
+filepath = "D:\Maui2025\Sensor-Testing\D406\Pressure_Test";
 
 % The filename of the data that you want to import
-filename = "modded-mtag.csv";
+filename = "Pressure_Test.mat";
 
 % tag_name is used to label plots, so you know which tag is which
-tag_name = "Old MTAG";
+tag_name = "D406";
 
 %% Import Tags (MORE STUFF TO CHANGE)
 
@@ -42,20 +42,20 @@ fullpath = filepath + "\" + filename;
 %   "sliced_tag" (this is to be used if you ran the tag through a the
 %   TagSlicer first)
 % MTAGs are currently not supported
-tag1 = tag_importer(fullpath, 'mTag', tag_name);
+tag1 = tag_importer(fullpath, 'D4', tag_name);
 
 %% Repeat for next tag (you can import as many tags as you want
-filepath = "C:\Users\tyson\Documents\ESTAR\473-data";
-filename = "mtag2.1.csv";
-tag_name = "MTAG 2.1";
+filepath = "D:\Maui2025\Sensor-Testing\D410\Pressure_Test";
+filename = "Pressure_Test.csv";
+tag_name = "D410";
 fullpath = filepath + "\" + filename;
-tag2 = tag_importer(fullpath, 'mTag2.1', tag_name);
+tag2 = tag_importer(fullpath, 'D4', tag_name);
 
 %% Construct the tag cluster
 
 % I only care about data between 50 and 450 seconds
 % Change this range
-range = [0 10000];
+range = [0 10000000];
 
 tags = TagCluster({tag1,tag2},false, range);
 tags = tags.sync_tags();

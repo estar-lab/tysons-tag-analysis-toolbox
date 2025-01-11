@@ -102,40 +102,40 @@ classdef Tag
                 self.rpy_tag(:,2) = pitch_filt_nv;
                 self.rpy_tag(:,3) = yaw_filt_nv;
                 
-            %     % Generate whale frame eulers
-            %     if ~isempty(self.depth)
-            %         if ~isempty(self.slides)
-            %             for i = 1:length(self.slides)-1
-            %                 s = self.slides(i);
-            %                 e = self.slides(i+1);
-            %                 self = self.orient_into_whale_frame(s,e);
-            %             end
-            % 
-            %             [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
-            %             [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
-            %                 calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
-            % 
-            %             self.rpy_whale(:,1) = roll_filt_nv;
-            %             self.rpy_whale(:,2) = pitch_filt_nv;
-            %             self.rpy_whale(:,3) = yaw_filt_nv;
-            %         else
-            %             s = 1;
-            %             e = length(self.time);
-            %             self = self.orient_into_whale_frame(s,e);
-            % 
-            %             [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
-            %             [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
-            %                 calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
-            % 
-            %             self.rpy_whale(:,1) = roll_filt_nv;
-            %             self.rpy_whale(:,2) = pitch_filt_nv;
-            %             self.rpy_whale(:,3) = yaw_filt_nv;
-            %         end
-            %     else
-            %         fprintf("No depth data for " + self.name + ", cannot correct orientation.");
-            %     end
-            % 
-            % 
+                % Generate whale frame eulers
+                if ~isempty(self.depth)
+                    if ~isempty(self.slides)
+                        for i = 1:length(self.slides)-1
+                            s = self.slides(i);
+                            e = self.slides(i+1);
+                            self = self.orient_into_whale_frame(s,e);
+                        end
+
+                        [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
+                        [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
+                            calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
+
+                        self.rpy_whale(:,1) = roll_filt_nv;
+                        self.rpy_whale(:,2) = pitch_filt_nv;
+                        self.rpy_whale(:,3) = yaw_filt_nv;
+                    else
+                        s = 1;
+                        e = length(self.time);
+                        self = self.orient_into_whale_frame(s,e);
+
+                        [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
+                        [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
+                            calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
+
+                        self.rpy_whale(:,1) = roll_filt_nv;
+                        self.rpy_whale(:,2) = pitch_filt_nv;
+                        self.rpy_whale(:,3) = yaw_filt_nv;
+                    end
+                else
+                    fprintf("No depth data for " + self.name + ", cannot correct orientation.");
+                end
+
+
              end
         end
         

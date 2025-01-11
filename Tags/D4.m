@@ -9,7 +9,7 @@ classdef D4 < Tag
             self.accel = A.data;
             self.mag = M.data;
             if exist("P","var") == 1
-                self.depth = P.data * -1;
+                self.depth = P.data * 1;
                 % floor depth to 0
                 self.depth = self.depth - max(self.depth);
             end
