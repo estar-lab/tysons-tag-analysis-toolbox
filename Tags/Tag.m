@@ -31,6 +31,12 @@ classdef Tag
 
         % depth (meters)
         depth
+
+        % speed (?)
+        speed
+        
+        % NIRS IR data
+        IR
         
         name
 
@@ -86,7 +92,7 @@ classdef Tag
                     quaternion(t, :) = AHRS.Quaternion;
                 end
                 euler = quatern2euler(quaternConj(quaternion)) * (180/pi);	% use conjugate for sensor frame relative to Earth and convert to degrees.
-                self.rpy = euler;
+                self.rpy_tag = euler;
                 self = self.euler_to_heading();
             end
 
@@ -109,23 +115,23 @@ classdef Tag
                             [self,rot] = self.orient_into_whale_frame(s,e);
                             self.rot_matrices{i} = rot;
                         end
-    
+
                         [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
                         [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
                             calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
-        
+
                         self.rpy_whale(:,1) = roll_filt_nv;
                         self.rpy_whale(:,2) = pitch_filt_nv;
                         self.rpy_whale(:,3) = yaw_filt_nv;
                     else
                         s = 1;
                         e = length(self.time);
-                        [self,~] = self.orient_into_whale_frame(s,e);
-    
+                        self = self.orient_into_whale_frame(s,e);
+
                         [roll_niv,pitch_niv,yaw_niv,~,~] = calc_rpy_naive(self.accel,self.mag,50,25);
                         [~, ~, ~, roll_filt_nv, pitch_filt_nv, yaw_filt_nv] = ...
                             calc_dynamic_pose(roll_niv, pitch_niv, yaw_niv, 150);
-        
+
                         self.rpy_whale(:,1) = roll_filt_nv;
                         self.rpy_whale(:,2) = pitch_filt_nv;
                         self.rpy_whale(:,3) = yaw_filt_nv;
@@ -134,8 +140,8 @@ classdef Tag
                     fprintf("No depth data for " + self.name + ", cannot correct orientation.");
                 end
 
-                
-            end
+
+             end
         end
         
         % Extract the portion of the dataset where the tag is on the
@@ -189,6 +195,18 @@ classdef Tag
             if ~isempty(self.depth)
                 self.depth = self.depth(s:e);
             end
+
+            if ~isempty(self.IR)
+                self.IR = self.IR(s:e);
+            end
+
+            if ~isempty(self.speed) 
+                self.speed = self.speed(s:e);
+            end
+
+            if ~isempty(self.temp)
+                self.temp = self.temp(s:e);
+            end
         end
         
         % Find slide times
@@ -241,6 +259,7 @@ classdef Tag
 
             fprintf("Plotting core data for " + self.name + "\n");
             fig = figure("Name",fig_name); clf(fig);
+            fontsize(fig, 24, "points")
 
             % Calculate Number of Plots Based on Available Data
             vars = [~isempty(self.accel) ...
@@ -248,7 +267,8 @@ classdef Tag
                     ~isempty(self.mag)   ...
                     ~isempty(self.rpy_tag)   ...
                     ~isempty(self.rpy_whale) ...
-                    ~isempty(self.depth)];
+                    ~isempty(self.depth) ...
+                    ~isempty(self.speed)];
             num_plots = sum(vars);
             current_plot = 1;
 
@@ -285,7 +305,7 @@ classdef Tag
                     plot(self.time,self.mag(:,i))
                 end
                 legend("X","Y","Z")
-                ylabel("Magnetometer (units?)")
+                ylabel("Magnetometer (uT)")
                 title(sprintf(self.name + " Magnetometer"))
                 xlabel("Time (s)")
                 current_plot = current_plot + 1;
@@ -335,6 +355,18 @@ classdef Tag
                 fprintf("\tNo depth data for " + self.name + "\n");
             end
 
+            % Speed plot
+            if ~isempty(self.speed)
+                axs(current_plot) = subplot(num_plots,1,current_plot); hold on;
+                plot(self.time, self.speed);
+                ylabel("Speed");
+                title(sprintf(self.name + " Speed"));
+                xlabel("Time (s)");
+                current_plot = current_plot + 1;
+            else
+                fprintf("\tNo speed data for " + self.name + "\n");
+            end
+
             linkaxes(axs,'x')
         end
         
@@ -350,16 +382,34 @@ classdef Tag
             xlabel("Time (seconds)")
         end
 
-        % Plot temperatures
-        function self = plot_temperatures(self)
+        function self = plot_IR(self) 
             fig = figure; clf(fig);
             hold on;
-            plot(self.time, self.temp_imu, 'r-');
-            plot(self.time, self.temp_pres, 'b-');
-            legend("IMU Temperature", "Pressure Sensor Temperature");
-            ylabel("Temperature (C)");
+            plot(self.time, self.IR);
+            xlabel("Time (seconds)")
+            ylabel("(???) (???)")
+            title("NIRS Plot");
+            grid on;
+        end
+
+        function self = plot_speed(self)
+            fig = figure; clf(fig);
+            hold on;
+            plot(self.time, self.speed);
             xlabel("Time (seconds)");
-            title(self.name + " temperature. Measurments from both sensors should be comparable.");
+            ylabel("Speed (pulse counts)")
+            title("Speed plot");
+            grid on;
+        end
+
+        function self = plot_temp(self)
+            fig = figure; clf(fig);
+            hold on;
+            plot(self.time, self.temp);
+            xlabel("Time (seconds)");
+            ylabel("Temperature (C)")
+            title("Temperature Plot");
+            grid on;
         end
 
         % This fits a ball to the magnetometer data, and centers the data

@@ -1,6 +1,8 @@
 clear; close all;
 
-addpath(genpath("External_Libs\DTAG4_Analysis\"));
+lib = "DTAG4_Analysis";
+fullpath_lib = genpath(lib);
+addpath(fullpath_lib);
 
 % Pick an appropriate deployment id. Usually you would follow the standard
 % DTAG protocol of: 2-letter Latin species initials, 2-digit year, underscore,
@@ -28,10 +30,10 @@ addpath(genpath("External_Libs\DTAG4_Analysis\"));
 % 'filepath' would be the path into the folder that contains the folder mn24_010a\. For me that happens to be
 % "C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\"
 
-depid = 'mn23_206a';
+depid = 'Pressure_Test';
 
 % Give the directory where the raw data is.
-filepath = 'C:\Users\tysonlin\Documents\Data\';
+filepath = 'D:\Maui2025\Sensor-Testing\D405\';
 
 %% Continue with script
 

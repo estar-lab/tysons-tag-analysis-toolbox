@@ -38,13 +38,8 @@ classdef TagCluster
             % contains a bunch of random data from moving the tags around. 
             % use these indexes to chop off the beginning and end of a
             % dataset. units are in seconds.
-            if ~exist('fig_name','var')
-                start_time = 0;
-                end_time = 100000000000;
-            else
-                start_time = window(1); 
-                end_time = window(2);
-            end
+            start_time = window(1); 
+            end_time = window(2);
 
             for i = 1:length(self.Tags)
                 start_index = find_index(self.Tags{i}.time, start_time);
@@ -76,24 +71,6 @@ classdef TagCluster
 % these functions call the baseTag functions on every tag in the cluster
 % so for the first one, calibrate_magnetometers() maps to
 % calibrate_magnetometer() for every tag object
-
-        % Runs a moving mean on tag animal yaws
-        % k is the length of the window
-        function self = moving_mean_yaw(self, k)
-            fig = figure("Name","Moving Mean Plot"); clf(fig); hold on;
-            for i = 1:length(self.Tags)
-                axs(i) = subplot(length(self.Tags),1,i); hold on;
-                plot(self.Tags{i}.time,self.Tags{i}.rpy_whale(:,3));
-                self.Tags{i}.rpy_whale(:,3) = movmean(self.Tags{i}.rpy_whale(:,3), k);
-                %self.Tags{i}.rpy_whale(:,3) = lowpass(self.Tags{i}.rpy_whale(:,3), 0.0000000001);
-                plot(self.Tags{i}.time,self.Tags{i}.rpy_whale(:,3));
-                xlabel("Time (seconds)");
-                ylabel("Yaw (degrees)");
-                legend("Raw Yaw", "Filtered Yaw");
-                title("Moving Mean on Yaw")
-            end
-            linkaxes(axs, 'x');
-        end
         
         % See Tag->slide_time()
         function self = slide_times(self)
@@ -182,9 +159,6 @@ classdef TagCluster
         % Plot acceleration data for all tags
         % Each tag gets its own subplot
         function self = plot_accels(self,fig_name)
-            if ~exist('fig_name','var')
-                fig_name = "All Tags Acceleration";
-            end
             disp("Plotting accelerometer data")
             fig = figure("Name",fig_name); clf(fig);
             
@@ -309,7 +283,7 @@ classdef TagCluster
             labels = ["X" "Y" "Z"];
 
             for i = 1:3
-                axs(2*i-1) = subplot(3,2,2*i-1); hold on;
+                axs(2*i-1) = subplot(3,3,i); hold on;
                 for j = 1:length(self.Tags)
                     plot(self.Tags{j}.time,self.Tags{j}.accel(:,i));
                 end
@@ -319,7 +293,7 @@ classdef TagCluster
                 xlabel("Time (s)");
                 grid on;
 
-                axs(2*i) = subplot(3,2,2*i); hold on;
+                axs(2*i) = subplot(3,3,i+3); hold on;
                 for j = 1:length(self.Tags)
                     plot(self.Tags{j}.time,self.Tags{j}.mag(:,i));
                 end
@@ -329,6 +303,36 @@ classdef TagCluster
                 xlabel("Time (s)");
                 grid on;
             end
+
+            axs(7) = subplot(3,3,7); hold on;
+            for j = 1:length(self.Tags)
+                plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,1));
+            end
+            legend(names)
+            xlabel("Time (seconds)")
+            ylabel("")
+            title("Roll")
+            grid on;
+
+            axs(8) = subplot(3,3,8); hold on;
+            for j = 1:length(self.Tags)
+                plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,2));
+            end
+            legend(names)
+            xlabel("Time (seconds)")
+            ylabel("")
+            title("Pitch")
+            grid on;
+
+            axs(9) = subplot(3,3,9); hold on;
+            for j = 1:length(self.Tags)
+                plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,3));
+            end
+            legend(names)
+            xlabel("Time (seconds)")
+            ylabel("")
+            title("Yaw")
+            grid on;
             linkaxes(axs,'x');
         end
 
@@ -415,16 +419,7 @@ classdef TagCluster
 
             fig = figure("Name",fig_name); clf(fig);
             for i = 1:length(self.Tags)
-                if length(self.Tags) == 1
-                    subplot(1,1,i); hold on; 
-                elseif length(self.Tags) == 2
-                    subplot(1,2,i); hold on;
-                elseif length(self.Tags) <= 4
-                    subplot(2,2,i); hold on;
-                elseif length(self.Tags) <= 6
-                    subplot(2,3,i); hold on;
-                end
-                
+                subplot(2,2,i); hold on; 
                 scatter3(self.Tags{i}.mag(:, 1), self.Tags{i}.mag(:, 2), self.Tags{i}.mag(:, 3), 4, 'filled');
                  
             
@@ -570,6 +565,9 @@ classdef TagCluster
         % All yaws on one plot
         % All pitches on one plot
         function self = plot_eulers_compare(self, fig_name)
+            if ~exist('fig_name','var')
+                fig_name = "Eulers Compare";
+            end
             fig = figure("Name",fig_name); clf(fig);
 
             names(1:length(self.Tags)) = {0};
@@ -577,7 +575,7 @@ classdef TagCluster
                 names{i} = self.Tags{i}.name;
             end
 
-            axs(1) = subplot(3,1,1); hold on;
+            axs(1) = subplot(1,3,1); hold on;
             for j = 1:length(self.Tags)
                 plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,1));
             end
@@ -587,7 +585,7 @@ classdef TagCluster
             title("Roll")
             grid on;
 
-            axs(2) = subplot(3,1,2); hold on;
+            axs(2) = subplot(1,3,2); hold on;
             for j = 1:length(self.Tags)
                 plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,2));
             end
@@ -597,7 +595,7 @@ classdef TagCluster
             title("Pitch")
             grid on;
 
-            axs(3) = subplot(3,1,3); hold on;
+            axs(3) = subplot(1,3,3); hold on;
             for j = 1:length(self.Tags)
                 plot(self.Tags{j}.time, self.Tags{j}.rpy_tag(:,3));
             end
@@ -609,6 +607,47 @@ classdef TagCluster
 
             linkaxes(axs, 'x');
         end
+
+        function plot_depths_compare(self, fig_name)            
+            if ~exist('fig_name','var')
+                fig_name = "Depths Compare";
+            end
+            fig = figure("Name",fig_name); clf(fig);
+            hold on;
+
+            names(1:length(self.Tags)) = {0};
+            for i = 1:length(self.Tags)
+                names{i} = self.Tags{i}.name;
+            end
+
+            for i = 1:length(self.Tags)
+                plot(self.Tags{i}.depth);
+            end
+            legend(names);
+            xlabel("Time (seconds)");
+            ylabel("Depth (m)");
+            title("Depths");
+            grid on;
+        end
+
+        function plot_depths(self, fig_name)
+            if ~exist('fig_name','var')
+                fig_name = "Depths";
+            end
+            fig = figure("Name",fig_name); clf(fig);
+            hold on;
+
+            for i = 1:length(self.Tags)
+                subplot(length(self.Tags),1,i);
+                plot(self.Tags{i}.depth);
+                title(self.Tags{i}.name);
+                xlabel("Time (seconds)");
+                ylabel("Depth (m)");
+                grid on;
+            end
+        end
+            
+            
 
 %% SPECIAL FUNCTIONS
 % These functions do special things
@@ -645,7 +684,7 @@ classdef TagCluster
                 axs(i) = subplot(length(sync_signals),1,i);
                 plot(sync_signals{i});
                 title("Draw a Rectangle Around the Portion of the Signal that You Want to Use as the Basis for" + ...
-                    " Synchronization")
+                    "Synchronization")
             end
             linkaxes(axs, 'x');
             bounds = get_crosscorrelation_bounds(axs);

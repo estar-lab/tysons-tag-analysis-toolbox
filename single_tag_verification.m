@@ -8,13 +8,13 @@ addpath(genpath("External_Libs\MTAG_Lib_Ding\"));
 %% CHANGE THIS STUFF
 
 % Same depid and filepath from data_extraction.m
-filepath = "C:\Users\tysonlin\Documents\Data\mn23_206a";
+filepath = "D:\Maui2025\Tag_Data\mn25_009a";
 
 % The filename of the data that you want to import
-filename = "mn23_206a";
+filename = "mn25_009a.mat";
 
 % tag_name is used to label plots, so you know which tag is which
-tag_name = "D4";
+tag_name = "mn25_009a";
 
 %% Import Tags (MORE STUFF TO CHANGE)
 
@@ -28,9 +28,8 @@ fullpath = filepath + "\" + filename;
 %   "dataLogger"
 %   "sliced_tag" (this is to be used if you ran the tag through a the
 %   TagSlicer first)
-%   "mTag"
-%   "mTag2"
-tag_type = "D4";
+% MTAGs are currently not supported
+tag_type = "D3";
 tag1 = tag_importer(fullpath, tag_type, tag_name);
 
 % I only care about data between 0 - 200000 seconds
@@ -42,8 +41,14 @@ tags = TagCluster({tag1},false, range);
 %% Do data processing
 
 % Extract trial portion
-% This generates the plot where you have to draw the rectangle
 tags = tags.trial_extractions();
+
+% Calibrate and verify magnetometers
+tags = tags.calibrate_magnetometers();
+tags = tags.normalize_magnetometers();
+tags = tags.adjust_balls();
+
+
 
 % Calibrate and verify magnetometers
 tags = tags.calibrate_magnetometers();
@@ -78,9 +83,7 @@ for i = 1:length(tags.Tags)
     tags.Tags{i}.plot_core("Euler Angles");
 end
 
-% This should be as close to a ball as possible
-tags.plot_magnetometer_balls("Final Magnetometer Balls");
-
+tags.plot_magnetometer_balls();
 % tags.plot_accels("Acceleration All Tags");
 % tags.plot_mags("Magnetometer All Tags");
 % tags.plot_headings("Headings");

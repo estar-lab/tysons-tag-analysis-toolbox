@@ -9,15 +9,16 @@ classdef mTag < Tag
             gyro = [];
             depth = [];
             for i = 1:length(file_paths)
-                n = readtable(file_paths(i,:));
+                n = readtable(file_paths(i,:), 'TreatAsEmpty', '');
                 accel = [accel; ...
                          n.accelX n.accelY n.accelZ];
                 gyro = [gyro; ...
                          n.gyroX n.gyroY n.gyroZ];
                 mag = [mag; ...
                          n.magX n.magY n.magZ];
-                depth = [depth; n.depth];
+                %depth = [depth; n.depth];
             end
+            depth = zeros(length(accel),1);
             depth = depth(~isnan(depth));
             depth_time = 0.2:0.2:0.2*length(depth);
             

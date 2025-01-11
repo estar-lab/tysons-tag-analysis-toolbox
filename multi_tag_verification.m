@@ -21,13 +21,13 @@ addpath(genpath("External_Libs\MTAG_Lib_Ding\"));
 %% CHANGE THIS STUFF
 
 % Same depid and filepath from data_extraction.m
-filepath = "C:\Users\tysonlin\Documents\Data\drift_test-080724-1606\d401_drift_try2";
+filepath = "D:\Maui2025\Sensor-Testing\D406\Pressure_Test";
 
 % The filename of the data that you want to import
-filename = "d401_drift_try2.mat";
+filename = "Pressure_Test.mat";
 
 % tag_name is used to label plots, so you know which tag is which
-tag_name = "D401";
+tag_name = "D406";
 
 %% Import Tags (MORE STUFF TO CHANGE)
 
@@ -46,9 +46,9 @@ fullpath = filepath + "\" + filename;
 tag1 = tag_importer(fullpath, 'D4', tag_name);
 
 %% Repeat for next tag (you can import as many tags as you want
-filepath = "C:\Users\tysonlin\Documents\Data\drift_test-080724-1606\mtag2";
-filename = "data82.csv";
-tag_name = "MTAG2";
+filepath = "D:\Maui2025\Sensor-Testing\D410\Pressure_Test";
+filename = "Pressure_Test.csv";
+tag_name = "D410";
 fullpath = filepath + "\" + filename;
 tag2 = tag_importer(fullpath, 'mTag2', tag_name);
 
@@ -62,13 +62,15 @@ tag3 = tag_importer(fullpath, 'uTag', tag_name);
 
 % I only care about data between 50 and 450 seconds
 % Change this range
-range = [0 100000000];
+range = [0 10000000];
 
 tags = TagCluster({tag1,tag2,tag3},false, range);
 tags = tags.sync_tags();
 tags = tags.lag_characterization(1,[10,10,10],200);
 
 %% Do data processing
+
+tags = tags.trial_extractions();
 
 % Calibrate and verify magnetometers
 %tags = tags.calibrate_magnetometers();
@@ -78,19 +80,26 @@ tags = tags.lag_characterization(1,[10,10,10],200);
 % Generate eulers 
 %tags = tags.eulers();
 
-%tags = tags.trial_extractions();
-
 
 %% Make Plots
+for i = 1:length(tags.Tags)
+    tags.Tags{i}.plot_core("Raw Euler Angles");
+end
+
+tags = tags.correct_eulers();
+
 % for i = 1:length(tags.Tags)
-%     tags.Tags{i}.plot_core("Raw Euler Angles");
+%     tags.Tags{i}.plot_core("sin(Euler Angles)");
 % end
 
-%tags.plot_magnetometer_balls();
+tags.plot_magnetometer_balls();
+
+tags.plot_accels_mags_compare();
+tags.plot_eulers_compare();
 % tags.plot_accels("Acceleration All Tags");
 % tags.plot_mags("Magnetometer All Tags");
 % tags.plot_headings("Headings");
-% tags.plot_eulers("Eulers");
+%tags.plot_eulers("Eulers");
 
 %% Clean up libaries
 

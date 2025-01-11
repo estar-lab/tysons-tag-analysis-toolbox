@@ -25,9 +25,8 @@ function tag = tag_importer(filename,tag_type,tag_name)
             fprintf("Importing " + tag_name + " as an MTAG\n");
             tag = mTag(filename,tag_name);
             return;
-        case 'mTag2'
-            fprintf("Importing " + tag_name + " as an MTAG2\n");
-            tag = mTag2(filename,tag_name);
+        case 'mTag2.1'
+            tag = mTag21(filename,tag_name);
             return;
         otherwise
             fprintf(tag_type + " is not a valid tag type\n");
