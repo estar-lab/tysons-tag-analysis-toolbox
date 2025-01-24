@@ -8,13 +8,13 @@ addpath(genpath("MTAG_Lib_Ding\"));
 %% CHANGE THIS STUFF
 
 % Same depid and filepath from data_extraction.m
-filepath = "D:\Maui2025\Tag_Data\mn25_009a";
+filepath = "C:\Users\tyson\Documents\ESTAR\GPS\Maui_Test\";
 
 % The filename of the data that you want to import
-filename = "mn25_009a.mat";
+filename = "Maui_Test.mat";
 
 % tag_name is used to label plots, so you know which tag is which
-tag_name = "mn25_009a";
+tag_name = "Maui_Test";
 
 %% Import Tags (MORE STUFF TO CHANGE)
 
@@ -29,7 +29,7 @@ fullpath = filepath + "\" + filename;
 %   "sliced_tag" (this is to be used if you ran the tag through a the
 %   TagSlicer first)
 % MTAGs are currently not supported
-tag_type = "D3";
+tag_type = "D4";
 tag1 = tag_importer(fullpath, tag_type, tag_name);
 
 % I only care about data between 0 - 200000 seconds

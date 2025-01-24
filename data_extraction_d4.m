@@ -30,10 +30,14 @@ addpath(fullpath_lib);
 % 'filepath' would be the path into the folder that contains the folder mn24_010a\. For me that happens to be
 % "C:\Users\tyson\Documents\ESTAR\DTAG Drift\Data\"
 
-depid = 'Pressure_Test';
+% % filepath = 'D:\Maui2025\Sensor_Testing\D405\';
+% % depid = 'Pressure_Test';
 
 % Give the directory where the raw data is.
-filepath = 'D:\Maui2025\Sensor-Testing\D405\';
+% 
+filepath = 'C:\Users\tyson\Documents\ESTAR\GPS\';
+depid = 'Maui_Test';
+
 
 %% Continue with script
 
@@ -75,6 +79,14 @@ M.data = M.data(1:lim,:);
 T0.data = T0.data(1:lim,:);
 P0.data = P0.data(1:lim,:);
 time_rv = time_rv(1:lim);
+
+% Tyson's Edits ----
+depth = 0.9948*(P0.data*-2345.6461+467.44037/10);
+figure; 
+plot(time_rv, depth);
+ylabel("Depth (m)");
+xlabel("Time (min)");
+title(depid);
 
 %%
 figure

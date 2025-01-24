@@ -43,7 +43,7 @@ data_dir = dir_st.dirname;
 % rec_name = 'gm22_222b'; % Pilot whale
 % rec_name = 'bm22_060a'; % Blue whale
 % rec_name = 'mn22_198a'; % humpback whale
-depid = 'mn25_009a';
+depid = 'mn25_013a';
 
 % Set file paths
 filepath = sprintf('%s%s', data_dir, depid);

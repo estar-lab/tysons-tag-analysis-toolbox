@@ -273,7 +273,7 @@ classdef Tag
             end
             legend("X","Y","Z")
             ylabel("Acceleration (m/s^2)")
-            title(sprintf(self.name + " Acceleration"));
+            title(sprintf(self.name + " Acceleration", 'Interpreter', 'none'));
             xlabel("Time (seconds)")
             current_plot = current_plot + 1;
             
@@ -286,7 +286,7 @@ classdef Tag
                 legend("X","Y", "Z");
                 ylabel("Gyroscope (dps)");
                 xlabel("Time (s)")
-                title(sprintf(self.name + " Gyroscope"))
+                title(sprintf(self.name + " Gyroscope", 'Interpreter', 'none'))
                 current_plot = current_plot + 1;
             else
                 fprintf("\tNo gyroscope data for " + self.name + "\n")
@@ -300,7 +300,7 @@ classdef Tag
                 end
                 legend("X","Y","Z")
                 ylabel("Magnetometer (uT)")
-                title(sprintf(self.name + " Magnetometer"))
+                title(sprintf(self.name + " Magnetometer", 'Interpreter', 'none'))
                 xlabel("Time (s)")
                 current_plot = current_plot + 1;
             else
@@ -315,7 +315,7 @@ classdef Tag
                 end
                 legend("Roll","Pitch","Yaw")
                 ylabel("Euler Angles)")
-                title(sprintf(self.name + " Tag Euler Angles"))
+                title(sprintf(self.name + " Tag Euler Angles", 'Interpreter', 'none'))
                 xlabel("Time (s)")
                 current_plot = current_plot + 1;
             else
@@ -330,7 +330,7 @@ classdef Tag
                 end
                 legend("Roll","Pitch","Yaw");
                 ylabel("Heading");
-                title(sprintf(self.name + " Animal Euler Angles"));
+                title(sprintf(self.name + " Animal Euler Angles", 'Interpreter', 'none'));
                 xlabel("Time (s)");
                 current_plot = current_plot + 1;
             else
@@ -342,7 +342,7 @@ classdef Tag
                 axs(current_plot) = subplot(num_plots,1,current_plot); hold on;
                 plot(self.time, self.depth);
                 ylabel("Depth");
-                title(sprintf(self.name + " Depth"));
+                title(sprintf(self.name + " Depth", 'Interpreter', 'none'));
                 xlabel("Time (s)");
                 current_plot = current_plot + 1;
             else
@@ -354,7 +354,7 @@ classdef Tag
                 axs(current_plot) = subplot(num_plots,1,current_plot); hold on;
                 plot(self.time, self.speed);
                 ylabel("Speed");
-                title(sprintf(self.name + " Speed"));
+                title(sprintf(self.name + " Speed", 'Interpreter', 'none'));
                 xlabel("Time (s)");
                 current_plot = current_plot + 1;
             else
